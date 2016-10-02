@@ -9,11 +9,10 @@ SpookyGame.Preloader.prototype = {
         game.stage.setBackgroundColor(0xa5572f);
 
         // import assets
-        game.load.image("player", "assets/blank.gif");
+        // game.load.image("player", "assets/blank.gif");
         game.load.image("bg", "assets/bg-placeholder.gif");
 
-        // this.load.image();
-        // this.load.spritesheet();
+        game.load.spritesheet('player', 'assets/player_walk_00.gif', 16, 16);
     },
     create: function() {
         game.state.start("Game");
