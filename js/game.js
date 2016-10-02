@@ -1,6 +1,9 @@
 SpookyGame.Game = function(game) {};
 
 
+var player;
+var cursors;
+
 SpookyGame.Game.prototype = {
     preload: function() {},
     create: create,
@@ -12,9 +15,12 @@ SpookyGame.Game.prototype = {
 
 
 function render() {
-    // console.log(scaledCanvas);
-    scaledCanvasContent.drawImage(game.canvas, 0, 0, game.width, game.height, 0, 0, scaledCanvasWidth, scaledCanvasHeight);
-
-
     // Debugging displays
+    // game.debug.cameraInfo(game.camera, 0, 0);
+    // game.debug.spriteCoords(player.sprite, 0, 32);
+
+
+
+    // redraw game on scaled-up canvas
+    scaledCanvasContent.drawImage(game.canvas, 0, 0, game.width, game.height, 0, 0, scaledCanvasWidth, scaledCanvasHeight);    
 }
