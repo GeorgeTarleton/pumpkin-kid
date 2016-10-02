@@ -1,18 +1,22 @@
 SpookyGame.Preloader = function(game) {
-    this.logo = null;
+    // game.logo = null;
 };
 
 SpookyGame.Preloader.prototype = {
     preload: function() {
         console.log("Preloading");
-        
-        this.stage.setBackgroundColor(0x381f1e);
+
+        game.stage.setBackgroundColor(0xa5572f);
+
+        // import assets
+        game.load.image("player", "assets/blank.gif");
+        game.load.image("bg", "assets/bg-placeholder.gif");
 
         // this.load.image();
         // this.load.spritesheet();
     },
     create: function() {
-        this.state.start("Game");
+        game.state.start("Game");
     },
     update: function() {
 

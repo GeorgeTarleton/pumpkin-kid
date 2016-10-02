@@ -1,24 +1,20 @@
 SpookyGame.Game = function(game) {};
 
-var game;
 
 SpookyGame.Game.prototype = {
-    preload: function() {
-        game = this;
-    },
+    preload: function() {},
     create: create,
-    update: update
+    update: update,
+    render: render
 };
 
-function create() {
-    console.log("Game created");
-}
 
-function update() {
-
-}
 
 
 function render() {
+    // console.log(scaledCanvas);
+    scaledCanvasContent.drawImage(game.canvas, 0, 0, game.width, game.height, 0, 0, scaledCanvasWidth, scaledCanvasHeight);
+
+
     // Debugging displays
 }
