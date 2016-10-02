@@ -1,7 +1,7 @@
 function Player(_sprite) {
     this.sprite = _sprite;
 
-    this.sprite.animations.add('idle', [0, 1], 4, true);
+    this.sprite.animations.add('idle', [0, 1, 2, 3], 8, true);
     this.sprite.animations.add('walk_down', [4, 5, 6, 7], 8, true);
     this.sprite.animations.play('idle');
 
