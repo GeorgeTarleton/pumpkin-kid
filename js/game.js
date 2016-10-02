@@ -22,5 +22,5 @@ function render() {
 
 
     // redraw game on scaled-up canvas
-    scaledCanvasContent.drawImage(game.canvas, 0, 0, game.width, game.height, 0, 0, scaledCanvasWidth, scaledCanvasHeight);    
+    scaledCanvasContent.drawImage(game.canvas, 0, 0, game.width, game.height, 0, 0, 640, 576);
 }

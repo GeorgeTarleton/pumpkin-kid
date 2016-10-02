@@ -3,8 +3,8 @@ function create() {
 
 
     // draw environment
-    // game.add.tileSprite(0, 0, 480, 480, "bg");
-    // game.world.setBounds(0, 0, 480, 480);
+    game.add.sprite(0, 0, "bg");
+    game.world.setBounds(0, 0, 480, 480);
 
     game.physics.startSystem(Phaser.Physics.P2JS);
 

@@ -16,8 +16,6 @@ var SpookyGame = {};
 
 var scaledCanvas;
 var scaledCanvasContent;
-var scaledCanvasWidth;
-var scaledCanvasHeight;
 
 SpookyGame.Boot = function(game) {};
 
@@ -26,13 +24,16 @@ SpookyGame.Boot.prototype = {
         game.input.maxPointers = 1;
 
         // set up scaled canvas to scale the game up 4x in the webpage
-        game.canvas.style['display'] = 'none';
-        scaledCanvas = Phaser.Canvas.create(0, game.width * 4, game.height * 4);
+        // http://www.photonstorm.com/phaser/pixel-perfect-scaling-a-phaser-game
+        game.canvas.style['display'] = 'none';          // hide phaser's default canvas
+        scaledCanvas = Phaser.Canvas.create(0, 640, 576);
         scaledCanvasContent = scaledCanvas.getContext('2d');
         Phaser.Canvas.addToDOM(scaledCanvas);
         Phaser.Canvas.setSmoothingEnabled(scaledCanvasContent, false);
-        scaledCanvasWidth = scaledCanvas.width;
-        scaledCanvasHeight = scaledCanvas.height;
+
+        // fix camera jittering when following player
+        // http://www.html5gamedevs.com/topic/12485-sprite-jittering-with-camera-follow/
+        game.renderer.renderSession.roundPixels = true;
 
 
     },
