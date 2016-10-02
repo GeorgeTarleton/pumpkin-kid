@@ -3,6 +3,7 @@ function Player(_sprite) {
 
     this.sprite.animations.add('idle', [0, 1, 2, 3], 8, true);
     this.sprite.animations.add('walk_down', [4, 5, 6, 7], 8, true);
+    this.sprite.animations.add('walk_up', [8, 9, 10, 11], 8, true);
     this.sprite.animations.play('idle');
 
 
@@ -20,9 +21,9 @@ Player.prototype.update = function (cursors) {
 
     if (cursors.up.isDown) {
         this.sprite.body.moveUp(100);
-        if (currentAnim.name != 'walk_down') {
+        if (currentAnim.name != 'walk_up') {
             this.sprite.animations.stop();
-            this.sprite.animations.play('walk_down');
+            this.sprite.animations.play('walk_up');
         }
     } else if (cursors.down.isDown) {
         this.sprite.body.moveDown(100);
