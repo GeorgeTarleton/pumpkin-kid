@@ -12,7 +12,8 @@ SpookyGame.Preloader.prototype = {
         // game.load.image("player", "assets/blank.gif");
         game.load.image("bg", "assets/bg-placeholder.gif");
 
-        game.load.spritesheet('player', 'assets/player_walk_00.gif', 16, 16);
+        game.load.spritesheet('player', 'assets/player.gif', 16, 16);
+
     },
     create: function() {
         game.state.start("Game");
