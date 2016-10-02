@@ -1,17 +1,22 @@
 function Player(_sprite) {
     this.sprite = _sprite;
 
-    this.sprite.animations.add('idle', [0, 1, 2, 3], 8, true);
-    this.sprite.animations.add('walk_down', [4, 5, 6, 7], 8, true);
-    this.sprite.animations.add('walk_up', [8, 9, 10, 11], 8, true);
-    this.sprite.animations.play('idle');
+    this.sprite.animations.add('idle_down', [0, 1, 2, 3], 8, true);
+    this.sprite.animations.add('idle_left', [4, 5, 6, 7], 8, true);
+    this.sprite.animations.add('idle_up', [8, 9, 10, 11], 8, true);
+    this.sprite.animations.add('idle_right', [12, 13, 14, 15], 8, true);
+    this.sprite.animations.add('walk_down', [16, 17, 18, 19], 8, true);
+    this.sprite.animations.add('walk_left', [20, 21, 22, 23], 8, true);
+    this.sprite.animations.add('walk_up', [24, 25, 26, 27], 8, true);
+    this.sprite.animations.add('walk_right', [28, 29, 30, 31], 8, true);
+    this.sprite.animations.play('idle_down');
 
 
 
     game.physics.p2.enable(this.sprite);
     this.sprite.body.fixedRotation = true;
 
-
+    var lastDirection = 'down';
 }
 
 Player.prototype.update = function (cursors) {
@@ -25,28 +30,40 @@ Player.prototype.update = function (cursors) {
             this.sprite.animations.stop();
             this.sprite.animations.play('walk_up');
         }
+        this.lastDirection = 'up';
     } else if (cursors.down.isDown) {
         this.sprite.body.moveDown(100);
         if (currentAnim.name != 'walk_down') {
             this.sprite.animations.stop();
             this.sprite.animations.play('walk_down');
         }
+        this.lastDirection = 'down';
     } else if (cursors.left.isDown) {
         this.sprite.body.moveLeft(100);
-        if (currentAnim.name != 'walk_down') {
+        if (currentAnim.name != 'walk_left') {
             this.sprite.animations.stop();
-            this.sprite.animations.play('walk_down');
+            this.sprite.animations.play('walk_left');
         }
+        this.lastDirection = 'left';
     } else if (cursors.right.isDown) {
         this.sprite.body.moveRight(100);
-        if (currentAnim.name != 'walk_down') {
+        if (currentAnim.name != 'walk_right') {
             this.sprite.animations.stop();
-            this.sprite.animations.play('walk_down');
+            this.sprite.animations.play('walk_right');
         }
+        this.lastDirection = 'right';
     } else {
-        if (currentAnim.name != 'idle') {
+        if (!currentAnim.name.match(/(idle)/)) {
             this.sprite.animations.stop();
-            this.sprite.animations.play('idle');
+            if (this.lastDirection == 'down') {
+                this.sprite.animations.play('idle_down');
+            } else if (this.lastDirection == 'up') {
+                this.sprite.animations.play('idle_up');
+            } else if (this.lastDirection == 'left') {
+                this.sprite.animations.play('idle_left');
+            } else if (this.lastDirection == 'right') {
+                this.sprite.animations.play('idle_right');
+            }
         }
     }
 }
