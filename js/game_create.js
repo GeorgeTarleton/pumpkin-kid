@@ -14,8 +14,6 @@ function create() {
         game.add.sprite(100, 100, "player")
     );
 
-    game.physics.p2.enable(player.sprite);
-
     cursors = game.input.keyboard.createCursorKeys();
 
     game.camera.follow(player.sprite);
