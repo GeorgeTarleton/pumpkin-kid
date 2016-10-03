@@ -2,16 +2,29 @@ var bitmap;
 var shadow;
 var player_mask;
 
+var map;
+var groundLayer, midLayer, topLayer, aboveLayer, collisionLayer;
+
 function create() {
     console.log("Game created");
 
+    game.physics.startSystem(Phaser.Physics.Arcade);
 
     // draw environment
     game.world.setBounds(0, 0, 480, 480);
     game.add.sprite(0, 0, "bg");
 
+    map = game.add.tilemap('map');
+    map.addTilesetImage('environment', 'map_tiles');
 
-    game.physics.startSystem(Phaser.Physics.P2JS);
+    collisionLayer = map.createLayer('collision');
+    groundLayer = map.createLayer('ground');
+    midLayer = map.createLayer('mid');
+    topLayer = map.createLayer('top');
+    aboveLayer = map.createLayer('above');
+
+    map.setCollision([2], true, 'collision');
+    groundLayer.resizeWorld();
 
     // init player
     player = new Player(

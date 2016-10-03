@@ -13,7 +13,7 @@ function Player(_sprite) {
 
 
 
-    game.physics.p2.enable(this.sprite);
+    game.physics.arcade.enable(this.sprite);
     this.sprite.body.fixedRotation = true;
 
     var lastDirection = 'down';
@@ -22,31 +22,31 @@ function Player(_sprite) {
 Player.prototype.update = function (cursors) {
     var currentAnim = this.sprite.animations.currentAnim;
 
-    this.sprite.body.setZeroVelocity();
+    this.sprite.body.velocity.set(0, 0);
 
     if (cursors.up.isDown) {
-        this.sprite.body.moveUp(100);
+        this.sprite.body.velocity.set(0, -100);
         if (currentAnim.name != 'walk_up') {
             this.sprite.animations.stop();
             this.sprite.animations.play('walk_up');
         }
         this.lastDirection = 'up';
     } else if (cursors.down.isDown) {
-        this.sprite.body.moveDown(100);
+        this.sprite.body.velocity.set(0, 100);
         if (currentAnim.name != 'walk_down') {
             this.sprite.animations.stop();
             this.sprite.animations.play('walk_down');
         }
         this.lastDirection = 'down';
     } else if (cursors.left.isDown) {
-        this.sprite.body.moveLeft(100);
+        this.sprite.body.velocity.set(-100, 0);
         if (currentAnim.name != 'walk_left') {
             this.sprite.animations.stop();
             this.sprite.animations.play('walk_left');
         }
         this.lastDirection = 'left';
     } else if (cursors.right.isDown) {
-        this.sprite.body.moveRight(100);
+        this.sprite.body.velocity.set(100, 0);
         if (currentAnim.name != 'walk_right') {
             this.sprite.animations.stop();
             this.sprite.animations.play('walk_right');

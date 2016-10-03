@@ -1,4 +1,6 @@
 function update() {
+    game.physics.arcade.collide(player.sprite, collisionLayer);
+
     player.update(cursors);
 
     player_mask.x = Math.round(player.sprite.centerX);
