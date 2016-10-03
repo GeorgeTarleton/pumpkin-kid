@@ -26,7 +26,7 @@ SpookyGame.Boot.prototype = {
         // set up scaled canvas to scale the game up 4x in the webpage
         // http://www.photonstorm.com/phaser/pixel-perfect-scaling-a-phaser-game
         game.canvas.style['display'] = 'none';          // hide phaser's default canvas
-        scaledCanvas = Phaser.Canvas.create(0, 640, 576);
+        scaledCanvas = Phaser.Canvas.create(null, 640, 576, '', true);
         scaledCanvasContent = scaledCanvas.getContext('2d');
         Phaser.Canvas.addToDOM(scaledCanvas);
         Phaser.Canvas.setSmoothingEnabled(scaledCanvasContent, false);

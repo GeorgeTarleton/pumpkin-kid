@@ -9,8 +9,9 @@ SpookyGame.Preloader.prototype = {
         game.stage.setBackgroundColor(0xa5572f);
 
         // import assets
-        // game.load.image("player", "assets/blank.gif");
         game.load.image("bg", "assets/bg-placeholder.gif");
+        game.load.image("mask", "assets/mask.gif");
+        game.load.image('shadow', 'assets/shadow.gif');
 
         game.load.spritesheet('player', 'assets/player.gif', 16, 16);
 
