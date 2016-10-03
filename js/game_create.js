@@ -31,7 +31,7 @@ function create() {
     topLayer = map.createLayer('top');
     aboveLayer = map.createLayer('above');
 
-    map.setCollision([2, 3, 82, 83], true, 'collision');
+    map.setCollisionBetween(1, 100, true, 'collision');
     groundLayer.resizeWorld();
 
 
