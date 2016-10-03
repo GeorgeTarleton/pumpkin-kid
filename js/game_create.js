@@ -3,7 +3,7 @@ var shadow;
 var player_mask;
 
 var map;
-var groundLayer, midLayer, topLayer, aboveLayer, collisionLayer;
+var groundLayer, bottomLayer, midLayer, topLayer, aboveLayer, collisionLayer;
 
 function create() {
     console.log("Game created");
@@ -12,24 +12,29 @@ function create() {
 
     // draw environment
     game.world.setBounds(0, 0, 480, 480);
-    game.add.sprite(0, 0, "bg");
 
+    // set up tilemap
     map = game.add.tilemap('map');
     map.addTilesetImage('environment', 'map_tiles');
 
+    // create tilemap layers
     collisionLayer = map.createLayer('collision');
     groundLayer = map.createLayer('ground');
-    midLayer = map.createLayer('mid');
-    topLayer = map.createLayer('top');
-    aboveLayer = map.createLayer('above');
+    bottomLayer = map.createLayer('bottom');
 
-    map.setCollision([2], true, 'collision');
-    groundLayer.resizeWorld();
-
-    // init player
+    // create player between appropriate layers
     player = new Player(
         game.add.sprite(game.world.centerX, game.world.centerY, "player")
     );
+
+    midLayer = map.createLayer('middle');
+    topLayer = map.createLayer('top');
+    aboveLayer = map.createLayer('above');
+
+    map.setCollision([2, 3, 82, 83], true, 'collision');
+    groundLayer.resizeWorld();
+
+
 
 
 

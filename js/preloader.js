@@ -11,13 +11,13 @@ SpookyGame.Preloader.prototype = {
         // import assets
 
         // map elements
-        game.load.tilemap('map', 'assets/maps/1.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.tilemap('map', 'assets/maps/2.json', null, Phaser.Tilemap.TILED_JSON);
         game.load.image('map_tiles', 'assets/environment.gif');
 
-        game.load.image("bg", "assets/bg-placeholder.gif");
         game.load.image("mask", "assets/mask.gif");
         game.load.image('shadow', 'assets/shadow.gif');
 
+        // character spritesheets
         game.load.spritesheet('player', 'assets/player.gif', 16, 16);
 
     },
