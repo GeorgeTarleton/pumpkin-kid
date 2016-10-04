@@ -41,7 +41,8 @@ function create() {
     // draw shadow & reveal masks
     shadow = game.make.sprite(0, 0, 'shadow');
 
-    player_mask = game.make.sprite(player.sprite.centerX, player.sprite.centerY, 'mask');
+    player_mask = game.make.sprite(player.sprite.centerX, player.sprite.centerY, 'mask_40');
+    player_mask.frame = 0;
     player_mask.anchor.set(0.5, 0.5);
 
     bitmap = game.make.bitmapData(game.world.width, game.world.height);
