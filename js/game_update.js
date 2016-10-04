@@ -1,14 +1,9 @@
-var frameCounter = 0;
-var visionMaskFull = true;
+var visionClock = 0;
 
 function update() {
-    // manually animate vision circle "flickering"
-    if (++frameCounter == 40) {
-        frameCounter = 0;
-        visionMaskFull = true;
-    } else if (frameCounter == 30) {
-        visionMaskFull = false;
-    }
+    // manually create clock to animate vision "flickering" for lighted objects
+    // 1 cycle = 40 frames
+    if (++visionClock == 40) visionClock = 0;
 
 
     game.physics.arcade.collide(player.sprite, collisionLayer);

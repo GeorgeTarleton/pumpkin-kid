@@ -13,9 +13,16 @@ function Pumpkin(_sprite) {
     this.visionMask = game.make.sprite(this.sprite.centerX, this.sprite.centerY, 'mask_40');
     this.visionMask.frame = 0;
     this.visionMask.anchor.set(0.5, 0.5);
+
+    this.visionClockStart = Math.floor(Math.random() * 40);
 }
 
 Pumpkin.prototype.updateVisionMask = function() {
-    this.visionMask.frame = visionMaskFull ? 0 : 1;
+    // create light flicker effect
+    if (visionClock == this.visionClockStart) {
+        this.visionMask.frame = 0;
+    } else if (visionClock == ((this.visionClockStart + 30) % 40)) {
+        this.visionMask.frame = 1;
+    }
     bitmap.draw(this.visionMask);
 }

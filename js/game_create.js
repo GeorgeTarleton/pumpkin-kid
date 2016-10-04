@@ -63,4 +63,10 @@ function placePumpkins() {
     pumpkins.push(new Pumpkin(
         game.add.sprite(192, 192, 'pumpkin')
     ));
+    pumpkins.push(new Pumpkin(
+        game.add.sprite(384, 192, 'pumpkin')
+    ));
+    pumpkins.push(new Pumpkin(
+        game.add.sprite(384, 384, 'pumpkin')
+    ));
 }

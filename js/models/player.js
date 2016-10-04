@@ -77,7 +77,12 @@ Player.prototype.update = function (cursors) {
 }
 
 Player.prototype.updateVisionMask = function() {
-    this.visionMask.frame = visionMaskFull ? 0 : 1;
+    // create light flicker effect
+    if (visionClock == 0) {
+        this.visionMask.frame = 0;
+    } else if (visionClock == 30) {
+        this.visionMask.frame = 1;
+    }
     this.visionMask.x = Math.round(this.sprite.centerX);
     this.visionMask.y = Math.round(this.sprite.centerY);
     bitmap.draw(this.visionMask);
