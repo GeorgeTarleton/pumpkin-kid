@@ -11,12 +11,15 @@ function Player(_sprite) {
     this.sprite.animations.add('walk_right', [28, 29, 30, 31], 8, true);
     this.sprite.animations.play('idle_down');
 
-
-
     game.physics.arcade.enable(this.sprite);
     this.sprite.body.fixedRotation = true;
-
     var lastDirection = 'down';
+
+    // only set collision for bottom half of player's body
+    this.sprite.body.setSize(16, 8, 0, 8);
+
+
+    this.visionRadius = 40;
 }
 
 Player.prototype.update = function (cursors) {
