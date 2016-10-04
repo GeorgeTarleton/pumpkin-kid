@@ -2,6 +2,8 @@ SpookyGame.Game = function(game) {};
 
 
 var player;
+var pumpkins = [];
+
 var cursors;
 
 SpookyGame.Game.prototype = {

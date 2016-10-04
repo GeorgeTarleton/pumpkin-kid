@@ -2,6 +2,7 @@ var frameCounter = 0;
 
 function update() {
     game.physics.arcade.collide(player.sprite, collisionLayer);
+    game.physics.arcade.collide(player.sprite, pumpkins.map(function(p) { return p.sprite }));
 
     player.update(cursors);
 

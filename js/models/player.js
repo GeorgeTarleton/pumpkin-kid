@@ -1,5 +1,6 @@
 function Player(_sprite) {
     this.sprite = _sprite;
+    this.sprite.anchor.set(0.5, 0.5);
 
     this.sprite.animations.add('idle_down', [0, 1, 2, 3], 8, true);
     this.sprite.animations.add('idle_left', [4, 5, 6, 7], 8, true);

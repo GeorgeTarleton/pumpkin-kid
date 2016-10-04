@@ -14,6 +14,7 @@ SpookyGame.Preloader.prototype = {
         game.load.tilemap('map', 'assets/maps/2.json', null, Phaser.Tilemap.TILED_JSON);
         game.load.image('map_tiles', 'assets/environment.gif');
 
+        // vision assets
         game.load.image('shadow', 'assets/shadow.gif');
         game.load.spritesheet('mask_20', 'assets/mask_20.gif', 40, 40);
         game.load.spritesheet('mask_30', 'assets/mask_30.gif', 60, 60);
@@ -24,6 +25,7 @@ SpookyGame.Preloader.prototype = {
 
         // character spritesheets
         game.load.spritesheet('player', 'assets/player.gif', 16, 16);
+        game.load.spritesheet('pumpkin', 'assets/pumpkin.gif', 32, 16);
 
     },
     create: function() {

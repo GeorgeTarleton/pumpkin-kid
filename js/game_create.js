@@ -11,7 +11,7 @@ function create() {
     game.physics.startSystem(Phaser.Physics.Arcade);
 
     // draw environment
-    game.world.setBounds(0, 0, 480, 480);
+    game.world.setBounds(0, 0, 640, 624);
 
     // set up tilemap
     map = game.add.tilemap('map');
@@ -22,9 +22,11 @@ function create() {
     groundLayer = map.createLayer('ground');
     bottomLayer = map.createLayer('bottom');
 
+    placePumpkins();
+
     // create player between appropriate layers
     player = new Player(
-        game.add.sprite(game.world.centerX, game.world.centerY, "player")
+        game.add.sprite(game.world.centerX, game.world.centerY, 'player')
     );
 
     midLayer = map.createLayer('middle');
@@ -33,6 +35,9 @@ function create() {
 
     map.setCollisionBetween(1, 100, true, 'collision');
     groundLayer.resizeWorld();
+
+
+
 
 
 
@@ -52,4 +57,10 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
 
     game.camera.follow(player.sprite);
+}
+
+function placePumpkins() {
+    pumpkins.push(new Pumpkin(
+        game.add.sprite(192, 192, 'pumpkin')
+    ));
 }
