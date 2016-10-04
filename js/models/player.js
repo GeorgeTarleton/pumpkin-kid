@@ -20,6 +20,10 @@ function Player(_sprite) {
     this.sprite.body.setSize(16, 8, 0, 8);
 
 
+    this.visionMask = game.make.sprite(this.sprite.centerX, this.sprite.centerY, 'mask_40');
+    this.visionMask.frame = 0;
+    this.visionMask.anchor.set(0.5, 0.5);
+
     this.visionRadius = 40;
 }
 
@@ -70,4 +74,11 @@ Player.prototype.update = function (cursors) {
             }
         }
     }
+}
+
+Player.prototype.updateVisionMask = function() {
+    this.visionMask.frame = visionMaskFull ? 0 : 1;
+    this.visionMask.x = Math.round(this.sprite.centerX);
+    this.visionMask.y = Math.round(this.sprite.centerY);
+    bitmap.draw(this.visionMask);
 }

@@ -9,4 +9,13 @@ function Pumpkin(_sprite) {
     game.physics.arcade.enable(this.sprite);
     this.sprite.body.immovable = true;
     this.sprite.body.setSize(20, 16, 6, 0);
+
+    this.visionMask = game.make.sprite(this.sprite.centerX, this.sprite.centerY, 'mask_40');
+    this.visionMask.frame = 0;
+    this.visionMask.anchor.set(0.5, 0.5);
+}
+
+Pumpkin.prototype.updateVisionMask = function() {
+    this.visionMask.frame = visionMaskFull ? 0 : 1;
+    bitmap.draw(this.visionMask);
 }
