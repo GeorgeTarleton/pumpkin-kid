@@ -10,7 +10,7 @@ function Pumpkin(_sprite) {
     this.sprite.body.immovable = true;
     this.sprite.body.setSize(20, 16, 6, 0);
 
-    this.visionMask = game.make.sprite(this.sprite.centerX, this.sprite.centerY, 'mask_40');
+    this.visionMask = game.make.sprite(this.sprite.centerX, this.sprite.centerY, 'mask_50');
     this.visionMask.frame = 0;
     this.visionMask.anchor.set(0.5, 0.5);
 
