@@ -16,7 +16,7 @@ var Pumpkin = function(spriteX, spriteY) {
     this.visionMask.frame = 0;
     this.visionMask.anchor.set(0.5, 0.5);
 
-    this.visionClockStart = Math.floor(Math.random() * 40);
+    this.visionClockStart = game.rnd.integerInRange(0, 40);
 }
 
 Pumpkin.prototype.toggle = function() {

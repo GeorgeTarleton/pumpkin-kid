@@ -10,6 +10,13 @@ SpookyGame.Game.prototype = {
 
 
 
+// Helper functions
+function distBetweenCenters(sprite1, sprite2) {
+    return Math.sqrt(Math.pow(sprite2.centerX - sprite1.centerX, 2) + Math.pow(sprite2.centerY - sprite1.centerY, 2));
+}
+
+
+
 function render() {
     // Debugging displays
     // game.debug.body(player.sprite);

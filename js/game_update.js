@@ -7,6 +7,8 @@ function update() {
 
 
     game.physics.arcade.collide(player.sprite, collisionLayer);
+    game.physics.arcade.collide(entitiesLayer, entitiesLayer);
+    game.physics.arcade.collide(entitiesLayer, collisionLayer);
     game.physics.arcade.collide(player.sprite, pumpkins.map(function(p) { return p.sprite }));
 
     player.update(cursors);
@@ -18,4 +20,13 @@ function update() {
         pumpkin.updateVisionMask();
     });
     bitmap.blendReset();
+
+    // update enemies
+    for (var type in enemies) {
+        if (enemies.hasOwnProperty(type)) {
+            enemies[type].forEach(function(e) {
+                e.update();
+            });
+        }
+    }
 }

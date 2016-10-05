@@ -12,9 +12,10 @@ var enemies = {
     'ghosts': [],
     'skeletons': []
 };
+var spawnTimers = {}
 
 var cursors;
-var keyPumpkin;
+var keyPumpkin, keyAttack;
 
 function create() {
     console.log("Game created");
@@ -48,8 +49,10 @@ function create() {
 
     player = new Player(game.world.centerX, game.world.centerY);
 
+    spawnTimers['ghosts'] = game.time.create(false);
+
     placePumpkins();
-    spawnEnemies();
+    spawnGhosts();
 
 
 
@@ -58,19 +61,17 @@ function create() {
 
     // draw shadow & reveal masks
     shadow = game.make.sprite(0, 0, 'shadow');
-
-    // player_mask = game.make.sprite(player.sprite.centerX, player.sprite.centerY, 'mask_40');
-    // player_mask.frame = 0;
-    // player_mask.anchor.set(0.5, 0.5);
-
     bitmap = game.make.bitmapData(game.world.width, game.world.height);
     game.add.sprite(0, 0, bitmap);
-    // bitmap.draw(shadow).blendDestinationOut().draw(player_mask).blendReset();
+
 
     cursors = game.input.keyboard.createCursorKeys();
 
     keyPumpkin = game.input.keyboard.addKey(Phaser.Keyboard.Z);
     keyPumpkin.onDown.add(togglePumpkin, this);
+
+    keyAttack = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    // keyAttack.onDown.add();
 
     game.camera.follow(player.sprite);
 }
@@ -84,10 +85,6 @@ function togglePumpkin() {
     }
 }
 
-function distBetweenCenters(sprite1, sprite2) {
-    return Math.sqrt(Math.pow(sprite2.centerX - sprite1.centerX, 2) + Math.pow(sprite2.centerY - sprite1.centerY, 2));
-}
-
 function placePumpkins() {
     pumpkins.push(
         new Pumpkin(192, 192),
@@ -96,9 +93,11 @@ function placePumpkins() {
     );
 }
 
-function spawnEnemies() {
-    enemies['ghosts'].push(
-        new Ghost(180, 200),
-        new Ghost(220, 200)
-    );
+function spawnGhosts() {
+    spawnTimers['ghosts'].add(3000, spawnGhosts, this);
+    if (spawnTimers['ghosts'].running) {
+        enemies['ghosts'].push(new Ghost(game.rnd.integerInRange(100, 400), 180));
+    } else {
+        spawnTimers['ghosts'].start();
+    }
 }

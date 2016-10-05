@@ -30,6 +30,8 @@ var Player = function(spriteX, spriteY) {
     this.visionMask.anchor.set(0.5, 0.5);
 
     this.visionRadius = 40;
+
+    this.alive = true;
 }
 
 Player.prototype.update = function(cursors) {
