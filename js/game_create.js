@@ -6,8 +6,6 @@ var map;
 var groundLayer, bottomLayer, midLayer, topLayer, aboveLayer, collisionLayer;
 var entitiesLayer, playerLayer;
 
-var pathfinder;
-
 var player;
 var pumpkins = [];
 var enemies = {
@@ -48,23 +46,6 @@ function create() {
     map.setCollisionBetween(1, 100, true, 'collision');
     groundLayer.resizeWorld();
 
-    // set up EasyStar pathfinder
-    // https://github.com/prettymuchbryce/easystarjs
-    pathfinder = new EasyStar.js();
-
-    // get grid data
-    var layerData = collisionLayer.layer.data;
-    var grid = [];
-    for (var i = 0, ilen = layerData.length; i < ilen; ++i) {
-        grid[i] = [];
-        for (var j = 0, jlen = layerData[i].length; j < jlen; ++j) {
-            grid[i][j] = layerData[i][j] ? layerData[i][j].index : 0;
-        }
-    }
-    pathfinder.setGrid(grid);
-    pathfinder.setAcceptableTiles([-1]);
-    pathfinder.setIterationsPerCalculation(1000);
-
 
     player = new Player(game.world.centerX, game.world.centerY);
 
@@ -96,7 +77,7 @@ function create() {
 }
 
 function togglePumpkin() {
-    for (var i = 0, plen = pumpkins.length; i < plen; ++i) {
+    for (var i = 0; i < pumpkins.length; ++i) {
         if (distBetweenCenters(player.sprite, pumpkins[i].sprite) < 20) {
             pumpkins[i].toggle();
             break;
@@ -113,11 +94,10 @@ function placePumpkins() {
 }
 
 function spawnGhosts() {
-    // spawnTimers['ghosts'].add(3000, spawnGhosts, this);
-    // if (spawnTimers['ghosts'].running) {
-    //     enemies['ghosts'].push(new Ghost(game.rnd.integerInRange(100, 400), 180));
-    // } else {
-    //     spawnTimers['ghosts'].start();
-    // }
-    enemies['ghosts'].push(new Ghost(260, 300));
+    spawnTimers['ghosts'].add(3000, spawnGhosts, this);
+    if (spawnTimers['ghosts'].running) {
+        enemies['ghosts'].push(new Ghost(game.rnd.integerInRange(100, 400), 180));
+    } else {
+        spawnTimers['ghosts'].start();
+    }
 }
