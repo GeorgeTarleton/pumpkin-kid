@@ -21,7 +21,7 @@ var Player = function(spriteX, spriteY) {
     var lastDirection = 'down';
 
     // only set collision for bottom half of player's body
-    this.sprite.body.setSize(16, 8, 0, 8);
+    this.sprite.body.setSize(16, 8, 8, 8);
 
 
     this.weapon = new Weapon(
