@@ -1,5 +1,5 @@
 var Player = function(spriteX, spriteY) {
-    this.sprite = game.add.sprite(spriteX, spriteY, 'player');
+    this.sprite = playerLayer.create(spriteX, spriteY, 'player');
 
     this.sprite.animations.add('idle_down', [0, 1, 2, 3], 8, true);
     this.sprite.animations.add('idle_left', [4, 5, 6, 7], 8, true);
@@ -20,7 +20,7 @@ var Player = function(spriteX, spriteY) {
 
 
     this.weapon = new Weapon(
-        game.add.sprite(-8, -8, 'shovel')
+        playerLayer.create(-8, -8, 'shovel')
     );
     this.sprite.addChild(this.weapon.sprite);
 

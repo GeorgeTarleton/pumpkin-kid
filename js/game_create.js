@@ -4,6 +4,7 @@ var player_mask;
 
 var map;
 var groundLayer, bottomLayer, midLayer, topLayer, aboveLayer, collisionLayer;
+var entitiesLayer, playerLayer;
 
 function create() {
     console.log("Game created");
@@ -22,19 +23,23 @@ function create() {
     groundLayer = map.createLayer('ground');
     bottomLayer = map.createLayer('bottom');
 
-    placePumpkins();
-
-    // create player between appropriate layers
-    player = new Player(game.world.centerX, game.world.centerY);
+    // create player & player-interactable objects between appropriate layers
+    entitiesLayer = game.add.group();
+    playerLayer = game.add.group();
 
     midLayer = map.createLayer('middle');
     topLayer = map.createLayer('top');
     aboveLayer = map.createLayer('above');
 
+    // make collision layer collidable
     map.setCollisionBetween(1, 100, true, 'collision');
     groundLayer.resizeWorld();
 
 
+    player = new Player(game.world.centerX, game.world.centerY);
+
+    placePumpkins();
+    spawnEnemies();
 
 
 
@@ -58,7 +63,16 @@ function create() {
 }
 
 function placePumpkins() {
-    pumpkins.push(new Pumpkin(192, 192));
-    pumpkins.push(new Pumpkin(384, 192));
-    pumpkins.push(new Pumpkin(384, 384));
+    pumpkins.push(
+        new Pumpkin(192, 192),
+        new Pumpkin(384, 192),
+        new Pumpkin(384, 384)
+    );
+}
+
+function spawnEnemies() {
+    enemies['ghosts'].push(
+        new Ghost(180, 200),
+        new Ghost(220, 200)
+    );
 }

@@ -3,6 +3,10 @@ SpookyGame.Game = function(game) {};
 
 var player;
 var pumpkins = [];
+var enemies = {
+    'ghosts': [],
+    'skeletons': []
+};
 
 var cursors;
 
@@ -18,9 +22,10 @@ SpookyGame.Game.prototype = {
 
 function render() {
     // Debugging displays
-    // game.debug.cameraInfo(game.camera, 0, 0);
-    // game.debug.spriteCoords(player.sprite, 0, 32);
-
+    // game.debug.body(player.sprite);
+    // enemies['ghosts'].forEach(function(g) {
+        // game.debug.body(g.sprite)
+    // });
 
 
     // redraw game on scaled-up canvas

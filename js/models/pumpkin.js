@@ -1,5 +1,5 @@
 var Pumpkin = function(spriteX, spriteY) {
-    this.sprite = game.add.sprite(spriteX, spriteX, 'pumpkin');
+    this.sprite = entitiesLayer.create(spriteX, spriteX, 'pumpkin');
 
     this.sprite.animations.add('off', [2], 0, false);
     this.sprite.animations.add('on', [0, 1], 4, true);
