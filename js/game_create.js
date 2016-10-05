@@ -6,6 +6,16 @@ var map;
 var groundLayer, bottomLayer, midLayer, topLayer, aboveLayer, collisionLayer;
 var entitiesLayer, playerLayer;
 
+var player;
+var pumpkins = [];
+var enemies = {
+    'ghosts': [],
+    'skeletons': []
+};
+
+var cursors;
+var keyPumpkin;
+
 function create() {
     console.log("Game created");
 
@@ -59,7 +69,23 @@ function create() {
 
     cursors = game.input.keyboard.createCursorKeys();
 
+    keyPumpkin = game.input.keyboard.addKey(Phaser.Keyboard.Z);
+    keyPumpkin.onDown.add(togglePumpkin, this);
+
     game.camera.follow(player.sprite);
+}
+
+function togglePumpkin() {
+    for (var i = 0; i < pumpkins.length; ++i) {
+        if (distBetweenCenters(player.sprite, pumpkins[i].sprite) < 20) {
+            pumpkins[i].toggle();
+            break;
+        }
+    }
+}
+
+function distBetweenCenters(sprite1, sprite2) {
+    return Math.sqrt(Math.pow(sprite2.centerX - sprite1.centerX, 2) + Math.pow(sprite2.centerY - sprite1.centerY, 2));
 }
 
 function placePumpkins() {

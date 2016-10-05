@@ -1,10 +1,12 @@
 var Pumpkin = function(spriteX, spriteY) {
-    this.sprite = entitiesLayer.create(spriteX, spriteX, 'pumpkin');
+    this.sprite = entitiesLayer.create(spriteX, spriteY, 'pumpkin');
+
+    this.isOn = false;
 
     this.sprite.animations.add('off', [2], 0, false);
     this.sprite.animations.add('on', [0, 1], 4, true);
     this.sprite.animations.add('dead', [4, 5], 4, true);
-    this.sprite.animations.play('on');
+    this.sprite.animations.play('off');
 
     game.physics.arcade.enable(this.sprite);
     this.sprite.body.immovable = true;
@@ -17,12 +19,24 @@ var Pumpkin = function(spriteX, spriteY) {
     this.visionClockStart = Math.floor(Math.random() * 40);
 }
 
-Pumpkin.prototype.updateVisionMask = function() {
-    // create light flicker effect
-    if (visionClock == this.visionClockStart) {
-        this.visionMask.frame = 0;
-    } else if (visionClock == ((this.visionClockStart + 30) % 40)) {
-        this.visionMask.frame = 1;
+Pumpkin.prototype.toggle = function() {
+    this.sprite.animations.stop();
+    this.isOn = !this.isOn;
+    if (this.isOn) {
+        this.sprite.animations.play('on');
+    } else {
+        this.sprite.animations.play('off');
     }
-    bitmap.draw(this.visionMask);
+}
+
+Pumpkin.prototype.updateVisionMask = function() {
+    if (this.isOn) {
+        // create light flicker effect
+        if (visionClock == this.visionClockStart) {
+            this.visionMask.frame = 0;
+        } else if (visionClock == ((this.visionClockStart + 30) % 40)) {
+            this.visionMask.frame = 1;
+        }
+        bitmap.draw(this.visionMask);
+    }
 }

@@ -1,15 +1,5 @@
 SpookyGame.Game = function(game) {};
 
-
-var player;
-var pumpkins = [];
-var enemies = {
-    'ghosts': [],
-    'skeletons': []
-};
-
-var cursors;
-
 SpookyGame.Game.prototype = {
     preload: function() {},
     create: create,
