@@ -9,6 +9,10 @@ var Player = function(spriteX, spriteY) {
     this.sprite.animations.add('walk_left', [20, 21, 22, 23], 8, true);
     this.sprite.animations.add('walk_up', [24, 25, 26, 27], 8, true);
     this.sprite.animations.add('walk_right', [28, 29, 30, 31], 8, true);
+    this.sprite.animations.add('swing_down', [32, 33, 34, 35], 8, true);
+    this.sprite.animations.add('swing_left', [32, 33, 34, 35], 8, true);
+    this.sprite.animations.add('swing_up', [32, 33, 34, 35], 8, true);
+    this.sprite.animations.add('swing_right', [32, 33, 34, 35], 8, true);
     this.sprite.animations.play('idle_down');
 
     game.physics.arcade.enable(this.sprite);
@@ -20,7 +24,7 @@ var Player = function(spriteX, spriteY) {
 
 
     this.weapon = new Weapon(
-        playerLayer.create(-8, -8, 'shovel')
+        playerLayer.create(0, -8, 'shovel')
     );
     this.sprite.addChild(this.weapon.sprite);
 

@@ -17,12 +17,20 @@ walk_00
 walk_01
 walk_02
 walk_03
+swing_00
+swing_01
+swing_02
+swing_03
 
 
 shovel (bottom-right corner)
 24 x 24
 
-00
-01
-02
-03
+idle_walk_00
+idle_walk_01
+idle_walk_02
+idle_walk_03
+swing_00
+swing_01
+swing_02
+swing_03
