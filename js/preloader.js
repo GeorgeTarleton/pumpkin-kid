@@ -24,7 +24,7 @@ SpookyGame.Preloader.prototype = {
         game.load.spritesheet('mask_70', 'assets/mask_70.gif', 140, 140);
 
         // character spritesheets
-        game.load.spritesheet('player', 'assets/player.gif', 16, 16);
+        game.load.spritesheet('player', 'assets/player_large.gif', 32, 16);
         game.load.spritesheet('pumpkin', 'assets/pumpkin.gif', 32, 16);
         game.load.spritesheet('shovel', 'assets/shovel.gif', 32, 24);
         game.load.spritesheet('ghost', 'assets/ghost_fat.gif', 24, 24);

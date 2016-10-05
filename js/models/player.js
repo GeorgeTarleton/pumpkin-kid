@@ -20,7 +20,7 @@ var Player = function(spriteX, spriteY) {
 
 
     this.weapon = new Weapon(
-        playerLayer.create(-8, -8, 'shovel')
+        playerLayer.create(0, -8, 'shovel')
     );
     this.sprite.addChild(this.weapon.sprite);
 
