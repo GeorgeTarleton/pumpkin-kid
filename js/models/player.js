@@ -1,6 +1,5 @@
-function Player(_sprite) {
-    this.sprite = _sprite;
-    this.sprite.anchor.set(0.5, 0.5);
+var Player = function(spriteX, spriteY) {
+    this.sprite = game.add.sprite(spriteX, spriteY, 'player');
 
     this.sprite.animations.add('idle_down', [0, 1, 2, 3], 8, true);
     this.sprite.animations.add('idle_left', [4, 5, 6, 7], 8, true);
@@ -20,6 +19,12 @@ function Player(_sprite) {
     this.sprite.body.setSize(16, 8, 0, 8);
 
 
+    this.weapon = new Weapon(
+        game.add.sprite(-8, -8, 'shovel')
+    );
+    this.sprite.addChild(this.weapon.sprite);
+
+
     this.visionMask = game.make.sprite(this.sprite.centerX, this.sprite.centerY, 'mask_40');
     this.visionMask.frame = 0;
     this.visionMask.anchor.set(0.5, 0.5);
@@ -27,7 +32,7 @@ function Player(_sprite) {
     this.visionRadius = 40;
 }
 
-Player.prototype.update = function (cursors) {
+Player.prototype.update = function(cursors) {
     var currentAnim = this.sprite.animations.currentAnim;
 
     this.sprite.body.velocity.set(0, 0);
@@ -37,6 +42,9 @@ Player.prototype.update = function (cursors) {
         if (currentAnim.name != 'walk_up') {
             this.sprite.animations.stop();
             this.sprite.animations.play('walk_up');
+
+            this.weapon.sprite.animations.stop();
+            this.weapon.sprite.animations.play('walk_up');
         }
         this.lastDirection = 'up';
     } else if (cursors.down.isDown) {
@@ -44,6 +52,9 @@ Player.prototype.update = function (cursors) {
         if (currentAnim.name != 'walk_down') {
             this.sprite.animations.stop();
             this.sprite.animations.play('walk_down');
+
+            this.weapon.sprite.animations.stop();
+            this.weapon.sprite.animations.play('walk_down');
         }
         this.lastDirection = 'down';
     } else if (cursors.left.isDown) {
@@ -51,6 +62,9 @@ Player.prototype.update = function (cursors) {
         if (currentAnim.name != 'walk_left') {
             this.sprite.animations.stop();
             this.sprite.animations.play('walk_left');
+
+            this.weapon.sprite.animations.stop();
+            this.weapon.sprite.animations.play('walk_left');
         }
         this.lastDirection = 'left';
     } else if (cursors.right.isDown) {
@@ -58,19 +72,28 @@ Player.prototype.update = function (cursors) {
         if (currentAnim.name != 'walk_right') {
             this.sprite.animations.stop();
             this.sprite.animations.play('walk_right');
+
+            this.weapon.sprite.animations.stop();
+            this.weapon.sprite.animations.play('walk_right');
         }
         this.lastDirection = 'right';
     } else {
         if (!currentAnim.name.match(/(idle)/)) {
             this.sprite.animations.stop();
+            this.weapon.sprite.animations.stop();
+
             if (this.lastDirection == 'down') {
                 this.sprite.animations.play('idle_down');
+                this.weapon.sprite.animations.play('idle_down');
             } else if (this.lastDirection == 'up') {
                 this.sprite.animations.play('idle_up');
+                this.weapon.sprite.animations.play('idle_up');
             } else if (this.lastDirection == 'left') {
                 this.sprite.animations.play('idle_left');
+                this.weapon.sprite.animations.play('idle_left');
             } else if (this.lastDirection == 'right') {
                 this.sprite.animations.play('idle_right');
+                this.weapon.sprite.animations.play('idle_right');
             }
         }
     }

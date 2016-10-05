@@ -25,9 +25,7 @@ function create() {
     placePumpkins();
 
     // create player between appropriate layers
-    player = new Player(
-        game.add.sprite(game.world.centerX, game.world.centerY, 'player')
-    );
+    player = new Player(game.world.centerX, game.world.centerY);
 
     midLayer = map.createLayer('middle');
     topLayer = map.createLayer('top');
@@ -60,13 +58,7 @@ function create() {
 }
 
 function placePumpkins() {
-    pumpkins.push(new Pumpkin(
-        game.add.sprite(192, 192, 'pumpkin')
-    ));
-    pumpkins.push(new Pumpkin(
-        game.add.sprite(384, 192, 'pumpkin')
-    ));
-    pumpkins.push(new Pumpkin(
-        game.add.sprite(384, 384, 'pumpkin')
-    ));
+    pumpkins.push(new Pumpkin(192, 192));
+    pumpkins.push(new Pumpkin(384, 192));
+    pumpkins.push(new Pumpkin(384, 384));
 }

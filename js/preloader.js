@@ -26,6 +26,7 @@ SpookyGame.Preloader.prototype = {
         // character spritesheets
         game.load.spritesheet('player', 'assets/player.gif', 16, 16);
         game.load.spritesheet('pumpkin', 'assets/pumpkin.gif', 32, 16);
+        game.load.spritesheet('shovel', 'assets/shovel.gif', 24, 24);
 
     },
     create: function() {
