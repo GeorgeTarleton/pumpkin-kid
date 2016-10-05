@@ -1,5 +1,6 @@
 var Player = function(spriteX, spriteY) {
     this.sprite = playerLayer.create(spriteX, spriteY, 'player');
+    this.sprite.anchor.set(0.5, 0.5);      // needed to center camera properly
 
     this.sprite.animations.add('idle_down', [0, 1, 2, 3], 8, true);
     this.sprite.animations.add('idle_left', [4, 5, 6, 7], 8, true);
@@ -24,12 +25,12 @@ var Player = function(spriteX, spriteY) {
 
 
     this.weapon = new Weapon(
-        playerLayer.create(0, -8, 'shovel')
+        playerLayer.create(-16, -16, 'shovel')
     );
     this.sprite.addChild(this.weapon.sprite);
 
 
-    this.visionMask = game.make.sprite(this.sprite.centerX, this.sprite.centerY, 'mask_40');
+    this.visionMask = game.make.sprite(this.sprite.centerX, this.sprite.centerY, 'mask_70');
     this.visionMask.frame = 0;
     this.visionMask.anchor.set(0.5, 0.5);
 
