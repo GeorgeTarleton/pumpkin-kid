@@ -6,7 +6,7 @@ var Enemy = function(spriteX, spriteY, spritesheet) {
     this.block = '';
 }
 
-Enemy.prototype.update = function() {
+Enemy.prototype.updateInternal = function() {
     this.chasePlayer();
     if (this.nextDirection === 'left') {
         this.sprite.body.velocity.set(-this.speed, 0);
@@ -79,8 +79,9 @@ Enemy.prototype.chasePlayer = function() {
 var Ghost = function(spriteX, spriteY) {
     Enemy.call(this, spriteX, spriteY, 'ghost');
 
-    this.sprite.animations.add('hover', [0, 1, 2, 3], 8, true);
-    this.sprite.animations.play('hover');
+    this.sprite.animations.add('walk_left', [0, 1, 2, 3], 8, true);
+    this.sprite.animations.add('walk_right', [4, 5, 6, 7], 8, true);
+    this.sprite.animations.play('walk_left');
 
     this.sprite.body.setSize(14, 14, 4, 6);
 
@@ -88,3 +89,46 @@ var Ghost = function(spriteX, spriteY) {
 }
 
 Ghost.prototype = Object.create(Enemy.prototype);
+
+Ghost.prototype.update = function() {
+    this.updateInternal();
+
+    if (this.sprite.body.velocity.x > 0) {
+        this.sprite.animations.play('walk_right');
+    } else {
+        this.sprite.animations.play('walk_left');
+    }
+}
+
+
+var Skeleton = function(spriteX, spriteY) {
+    Enemy.call(this, spriteX, spriteY, 'skelly');
+
+    this.sprite.animations.add('walk_down', [0, 1, 2, 3], 8, true);
+    this.sprite.animations.add('walk_left', [4, 5, 6, 7], 8, true);
+    this.sprite.animations.add('walk_up', [8, 9, 10, 11], 8, true);
+    this.sprite.animations.add('walk_right', [12, 13, 14, 15], 8, true);
+    this.sprite.animations.play('walk_down');
+
+    this.sprite.body.setSize(10, 16, 3, 0);
+
+    this.speed = 40;
+}
+
+Skeleton.prototype = Object.create(Enemy.prototype);
+
+Skeleton.prototype.update = function() {
+    this.updateInternal();
+
+    var vx = this.sprite.body.velocity.x;
+    var vy = this.sprite.body.velocity.y;
+    if (vx > 0) {
+        this.sprite.animations.play('walk_right');
+    } else if (vx < 0) {
+        this.sprite.animations.play('walk_left');
+    } else if (vy > 0) {
+        this.sprite.animations.play('walk_down');
+    } else {
+        this.sprite.animations.play('walk_up');
+    }
+}
