@@ -10,10 +10,10 @@ var Player = function(spriteX, spriteY) {
     this.sprite.animations.add('walk_left', [20, 21, 22, 23], 8, true);
     this.sprite.animations.add('walk_up', [24, 25, 26, 27], 8, true);
     this.sprite.animations.add('walk_right', [28, 29, 30, 31], 8, true);
-    this.sprite.animations.add('swing_down', [32, 33, 34, 35], 8, true);
-    this.sprite.animations.add('swing_left', [36, 37, 38, 39], 8, true);
-    this.sprite.animations.add('swing_up', [40, 41, 42, 43], 8, true);
-    this.sprite.animations.add('swing_right', [44, 45, 46, 47], 8, true);
+    this.sprite.animations.add('swing_down', [32, 33, 34, 35], 8, false);
+    this.sprite.animations.add('swing_left', [36, 37, 38, 39], 8, false);
+    this.sprite.animations.add('swing_up', [40, 41, 42, 43], 8, false);
+    this.sprite.animations.add('swing_right', [44, 45, 46, 47], 8, false);
     this.sprite.animations.play('idle_down');
 
     game.physics.arcade.enable(this.sprite);
@@ -29,8 +29,11 @@ var Player = function(spriteX, spriteY) {
     );
     this.sprite.addChild(this.weapon.sprite);
 
+    this.attackTimer = game.time.create(false);
+    this.attacking = false;
 
-    this.visionMask = game.make.sprite(this.sprite.centerX, this.sprite.centerY, 'mask_70');
+
+    this.visionMask = game.make.sprite(this.sprite.centerX, this.sprite.centerY, 'mask_40');
     this.visionMask.frame = 0;
     this.visionMask.anchor.set(0.5, 0.5);
 
@@ -40,69 +43,35 @@ var Player = function(spriteX, spriteY) {
 }
 
 Player.prototype.update = function(cursors) {
+    if (this.attacking) return;
+
     var currentAnim = this.sprite.animations.currentAnim;
 
     this.sprite.body.velocity.set(0, 0);
 
     if (cursors.up.isDown) {
         this.sprite.body.velocity.set(0, -100);
-        if (currentAnim.name != 'walk_up') {
-            this.sprite.animations.stop();
-            this.sprite.animations.play('walk_up');
-
-            this.weapon.sprite.animations.stop();
-            this.weapon.sprite.animations.play('walk_up');
-        }
+        this.sprite.animations.play('walk_up');
+        this.weapon.sprite.animations.play('walk_up');
         this.lastDirection = 'up';
     } else if (cursors.down.isDown) {
         this.sprite.body.velocity.set(0, 100);
-        if (currentAnim.name != 'walk_down') {
-            this.sprite.animations.stop();
-            this.sprite.animations.play('walk_down');
-
-            this.weapon.sprite.animations.stop();
-            this.weapon.sprite.animations.play('walk_down');
-        }
+        this.sprite.animations.play('walk_down');
+        this.weapon.sprite.animations.play('walk_down');
         this.lastDirection = 'down';
     } else if (cursors.left.isDown) {
         this.sprite.body.velocity.set(-100, 0);
-        if (currentAnim.name != 'walk_left') {
-            this.sprite.animations.stop();
-            this.sprite.animations.play('walk_left');
-
-            this.weapon.sprite.animations.stop();
-            this.weapon.sprite.animations.play('walk_left');
-        }
+        this.sprite.animations.play('walk_left');
+        this.weapon.sprite.animations.play('walk_left');
         this.lastDirection = 'left';
     } else if (cursors.right.isDown) {
         this.sprite.body.velocity.set(100, 0);
-        if (currentAnim.name != 'walk_right') {
-            this.sprite.animations.stop();
-            this.sprite.animations.play('walk_right');
-
-            this.weapon.sprite.animations.stop();
-            this.weapon.sprite.animations.play('walk_right');
-        }
+        this.sprite.animations.play('walk_right');
+        this.weapon.sprite.animations.play('walk_right');
         this.lastDirection = 'right';
     } else {
-        if (!currentAnim.name.match(/(idle)/)) {
-            this.sprite.animations.stop();
-            this.weapon.sprite.animations.stop();
-
-            if (this.lastDirection == 'down') {
-                this.sprite.animations.play('idle_down');
-                this.weapon.sprite.animations.play('idle_down');
-            } else if (this.lastDirection == 'up') {
-                this.sprite.animations.play('idle_up');
-                this.weapon.sprite.animations.play('idle_up');
-            } else if (this.lastDirection == 'left') {
-                this.sprite.animations.play('idle_left');
-                this.weapon.sprite.animations.play('idle_left');
-            } else if (this.lastDirection == 'right') {
-                this.sprite.animations.play('idle_right');
-                this.weapon.sprite.animations.play('idle_right');
-            }
-        }
+        this.sprite.animations.play('idle_' + this.lastDirection);
+        this.weapon.sprite.animations.play('idle_' + this.lastDirection);
     }
 }
 
@@ -119,5 +88,17 @@ Player.prototype.updateVisionMask = function() {
 }
 
 Player.prototype.attack = function() {
-    
+    if (this.attackTimer.running && !this.attackTimer.expired) return;
+    this.sprite.animations.play('swing_' + this.lastDirection);
+    this.weapon.sprite.animations.play('swing_' + this.lastDirection);
+    this.attackTimer.add(this.weapon.attackTime, this.afterAttack, this);
+    this.attacking = true;
+    this.sprite.body.velocity.set(0, 0);
+    this.attackTimer.start();
+}
+
+Player.prototype.afterAttack = function() {
+    this.sprite.animations.play('idle_' + this.lastDirection);
+    this.weapon.sprite.animations.play('idle_' + this.lastDirection);
+    this.attacking = false;
 }
