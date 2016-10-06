@@ -71,10 +71,15 @@ function create() {
     keyPumpkin.onDown.add(togglePumpkin, this);
 
     keyAttack = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-    // keyAttack.onDown.add();
+    keyAttack.onDown.add(attack, this);
 
     game.camera.follow(player.sprite);
 }
+
+function attack() {
+    player.attack();
+}
+
 
 function togglePumpkin() {
     for (var i = 0; i < pumpkins.length; ++i) {

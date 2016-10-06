@@ -11,9 +11,9 @@ var Player = function(spriteX, spriteY) {
     this.sprite.animations.add('walk_up', [24, 25, 26, 27], 8, true);
     this.sprite.animations.add('walk_right', [28, 29, 30, 31], 8, true);
     this.sprite.animations.add('swing_down', [32, 33, 34, 35], 8, true);
-    this.sprite.animations.add('swing_left', [32, 33, 34, 35], 8, true);
-    this.sprite.animations.add('swing_up', [32, 33, 34, 35], 8, true);
-    this.sprite.animations.add('swing_right', [32, 33, 34, 35], 8, true);
+    this.sprite.animations.add('swing_left', [36, 37, 38, 39], 8, true);
+    this.sprite.animations.add('swing_up', [40, 41, 42, 43], 8, true);
+    this.sprite.animations.add('swing_right', [44, 45, 46, 47], 8, true);
     this.sprite.animations.play('idle_down');
 
     game.physics.arcade.enable(this.sprite);
@@ -116,4 +116,8 @@ Player.prototype.updateVisionMask = function() {
     this.visionMask.x = Math.round(this.sprite.centerX);
     this.visionMask.y = Math.round(this.sprite.centerY);
     bitmap.draw(this.visionMask);
+}
+
+Player.prototype.attack = function() {
+    
 }
