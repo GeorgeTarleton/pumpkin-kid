@@ -5,9 +5,11 @@ spritesheet convention
 02 - up
 03 - right
 
+environment
+8 x 8
 
 player
-16 x 16
+24 x 24
 
 idle_00
 idle_01
@@ -23,7 +25,7 @@ swing_02
 swing_03
 
 
-shovel (bottom-right corner)
+shovel
 24 x 24
 
 idle_walk_00
@@ -34,3 +36,11 @@ swing_00
 swing_01
 swing_02
 swing_03
+
+ghost_fat
+24 x 24
+
+idle_walk_01
+idle_walk_03
+death_01
+death_03
