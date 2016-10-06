@@ -29,6 +29,11 @@ var Player = function(spriteX, spriteY) {
     );
     this.sprite.addChild(this.weapon.sprite);
 
+    this.meleeHitbox = playerLayer.create(0, 0, 'melee_hitbox');
+    this.sprite.addChild(this.meleeHitbox);
+    game.physics.arcade.enable(this.meleeHitbox);
+    this.meleeHitbox.body.enable = false;
+
     this.attackTimer = game.time.create(false);
     this.attacking = false;
 
@@ -87,18 +92,38 @@ Player.prototype.updateVisionMask = function() {
     bitmap.draw(this.visionMask);
 }
 
-Player.prototype.attack = function() {
-    if (this.attackTimer.running && !this.attackTimer.expired) return;
-    this.sprite.animations.play('swing_' + this.lastDirection);
-    this.weapon.sprite.animations.play('swing_' + this.lastDirection);
-    this.attackTimer.add(this.weapon.attackTime, this.afterAttack, this);
-    this.attacking = true;
-    this.sprite.body.velocity.set(0, 0);
-    this.attackTimer.start();
+Player.prototype.attack = function(forceAttack) {
+    forceAttack = forceAttack || false;
+    if (this.attackTimer.expired || !this.attackTimer.running || forceAttack) {
+        this.attackTimer.add(this.weapon.attackTime, this.afterAttack, this);
+        this.attackTimer.start();
+
+        this.sprite.animations.play('swing_' + this.lastDirection);
+        this.weapon.sprite.animations.play('swing_' + this.lastDirection);
+
+        this.attacking = true;
+        this.sprite.body.velocity.set(0, 0);
+        this.meleeHitbox.body.enable = true;
+
+        if (this.lastDirection == 'down') {
+            this.meleeHitbox.body.setSize(16, 16, -8, 0);
+        } else if (this.lastDirection == 'up') {
+            this.meleeHitbox.body.setSize(16, 16, -8, -16);
+        } else if (this.lastDirection == 'left') {
+            this.meleeHitbox.body.setSize(16, 16, -16, -8);
+        } else if (this.lastDirection == 'right') {
+            this.meleeHitbox.body.setSize(16, 16, 0, -8);
+        }
+    }
 }
 
 Player.prototype.afterAttack = function() {
     this.sprite.animations.play('idle_' + this.lastDirection);
     this.weapon.sprite.animations.play('idle_' + this.lastDirection);
-    this.attacking = false;
+    if (keyAttack.isDown) {
+        this.attack(true);
+    } else {
+        this.attacking = false;
+        this.meleeHitbox.body.enable = false;
+    }
 }

@@ -2,11 +2,14 @@ var Enemy = function(spriteX, spriteY, spritesheet) {
     this.sprite = entitiesLayer.create(spriteX, spriteY, spritesheet);
     game.physics.arcade.enable(this.sprite);
 
+    this.isKnockedBack = false;
+
     this.nextDirection = 'stop';
     this.block = '';
 }
 
 Enemy.prototype.updateInternal = function() {
+    if (this.isKnockedBack) return;
     this.chasePlayer();
     if (this.nextDirection === 'left') {
         this.sprite.body.velocity.set(-this.speed, 0);
@@ -72,6 +75,14 @@ Enemy.prototype.chasePlayer = function() {
             }
         }
     }
+}
+
+Enemy.prototype.knockback = function(direction) {
+    var knockbackTimer = game.time.create(false);
+    knockbackTimer.add(200, function() { this.isKnockedBack = false; }, this);
+    knockbackTimer.start();
+
+    this.sprite.body.velocity.set(-200, 0);
 }
 
 
