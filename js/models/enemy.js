@@ -96,7 +96,7 @@ var Ghost = function(spriteX, spriteY) {
 
     this.sprite.body.setSize(14, 14, 4, 6);
 
-    this.speed = 30;
+    this.speed = 15;
 }
 
 Ghost.prototype = Object.create(Enemy.prototype);
@@ -121,9 +121,9 @@ var Skeleton = function(spriteX, spriteY) {
     this.sprite.animations.add('walk_right', [12, 13, 14, 15], 8, true);
     this.sprite.animations.play('walk_down');
 
-    this.sprite.body.setSize(10, 16, 3, 0);
+    this.sprite.body.setSize(8, 14, 4, 2);
 
-    this.speed = 40;
+    this.speed = 25;
 }
 
 Skeleton.prototype = Object.create(Enemy.prototype);
