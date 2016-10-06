@@ -35,12 +35,15 @@ function update() {
 }
 
 function knockbackEnemies(hitbox, enemy) {
-    // console.log(hitbox);
-    // console.log(enemy);
-
-    // enemies.forEach(function(e) {
-        // console.log(player.lastDirection);
-        // enemy.sprite.body.velocity.set(-100, 0);
-    // });
-    // enemy.knockback();
+    enemy.knockback = true;
+    for (var type in enemies) {
+        if (enemies.hasOwnProperty(type)) {
+            enemies[type].forEach(function(e) {
+                if (e.sprite.knockback && !e.isKnockedBack) {
+                    e.knockback();
+                }
+            });
+        }
+    }
+    enemy.knockback = false;
 }

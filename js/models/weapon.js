@@ -1,7 +1,7 @@
 var Weapon = function(_sprite) {
     this.sprite = _sprite;
 
-    this.attackTime = 500;
+    this.attackTime = 600;
 
     this.sprite.animations.add('idle_down', [0, 1], 4, true);
     this.sprite.animations.add('idle_left', [4, 5], 4, true);

@@ -34,7 +34,7 @@ var Player = function(spriteX, spriteY) {
     game.physics.arcade.enable(this.meleeHitbox);
     this.meleeHitbox.body.enable = false;
 
-    this.attackTimer = game.time.create(false);
+
     this.attacking = false;
 
 
@@ -48,6 +48,13 @@ var Player = function(spriteX, spriteY) {
 }
 
 Player.prototype.update = function(cursors) {
+    // only enable melee hitbox for a short duration within the attack animation
+    if (this.attackTimer && this.attackTimer.ms >= 400) {
+        this.meleeHitbox.body.enable = false;
+    } else if (this.attackTimer && this.attackTimer.ms >= 200) {
+        this.meleeHitbox.body.enable = true;
+    }
+
     if (this.attacking) return;
 
     var currentAnim = this.sprite.animations.currentAnim;
@@ -92,9 +99,9 @@ Player.prototype.updateVisionMask = function() {
     bitmap.draw(this.visionMask);
 }
 
-Player.prototype.attack = function(forceAttack) {
-    forceAttack = forceAttack || false;
-    if (this.attackTimer.expired || !this.attackTimer.running || forceAttack) {
+Player.prototype.attack = function() {
+    if (!this.attacking) {
+        this.attackTimer = game.time.create(false);
         this.attackTimer.add(this.weapon.attackTime, this.afterAttack, this);
         this.attackTimer.start();
 
@@ -103,27 +110,27 @@ Player.prototype.attack = function(forceAttack) {
 
         this.attacking = true;
         this.sprite.body.velocity.set(0, 0);
-        this.meleeHitbox.body.enable = true;
 
         if (this.lastDirection == 'down') {
             this.meleeHitbox.body.setSize(16, 16, -8, 0);
         } else if (this.lastDirection == 'up') {
             this.meleeHitbox.body.setSize(16, 16, -8, -16);
         } else if (this.lastDirection == 'left') {
-            this.meleeHitbox.body.setSize(16, 16, -16, -8);
+            this.meleeHitbox.body.setSize(24, 16, -24, -8);
         } else if (this.lastDirection == 'right') {
-            this.meleeHitbox.body.setSize(16, 16, 0, -8);
+            this.meleeHitbox.body.setSize(24, 16, 0, -8);
         }
     }
 }
 
 Player.prototype.afterAttack = function() {
+    this.attackTimer.destroy();
     this.sprite.animations.play('idle_' + this.lastDirection);
     this.weapon.sprite.animations.play('idle_' + this.lastDirection);
+    this.attacking = false;
     if (keyAttack.isDown) {
-        this.attack(true);
+        this.attack();
     } else {
-        this.attacking = false;
         this.meleeHitbox.body.enable = false;
     }
 }

@@ -3,6 +3,7 @@ var Enemy = function(spriteX, spriteY, spritesheet) {
     game.physics.arcade.enable(this.sprite);
 
     this.isKnockedBack = false;
+    this.knockbackTimer = game.time.create(false);
 
     this.nextDirection = 'stop';
     this.block = '';
@@ -78,11 +79,22 @@ Enemy.prototype.chasePlayer = function() {
 }
 
 Enemy.prototype.knockback = function(direction) {
-    var knockbackTimer = game.time.create(false);
-    knockbackTimer.add(200, function() { this.isKnockedBack = false; }, this);
-    knockbackTimer.start();
+    if (this.knockbackTimer.expired || !this.knockbackTimer.running) {
+        this.knockbackTimer.add(100, function() { this.isKnockedBack = false; }, this);
+        this.knockbackTimer.start();
 
-    this.sprite.body.velocity.set(-200, 0);
+        this.isKnockedBack = true;
+
+        if (player.lastDirection == 'down') {
+            this.sprite.body.velocity.set(0, 150);
+        } else if (player.lastDirection == 'up') {
+            this.sprite.body.velocity.set(0, -150);
+        } else if (player.lastDirection == 'left') {
+            this.sprite.body.velocity.set(-150, 0);
+        } else if (player.lastDirection == 'right') {
+            this.sprite.body.velocity.set(150, 0);
+        }
+    }
 }
 
 
@@ -103,6 +115,8 @@ Ghost.prototype = Object.create(Enemy.prototype);
 
 Ghost.prototype.update = function() {
     this.updateInternal();
+
+    if (this.isKnockedBack) return;
 
     if (this.sprite.body.velocity.x > 0) {
         this.sprite.animations.play('walk_right');
@@ -130,6 +144,8 @@ Skeleton.prototype = Object.create(Enemy.prototype);
 
 Skeleton.prototype.update = function() {
     this.updateInternal();
+
+    if (this.isKnockedBack) return;
 
     var vx = this.sprite.body.velocity.x;
     var vy = this.sprite.body.velocity.y;
