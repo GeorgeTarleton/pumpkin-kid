@@ -94,10 +94,11 @@ function placePumpkins() {
 }
 
 function spawnGhosts() {
-    spawnTimers['ghosts'].add(3000, spawnGhosts, this);
-    if (spawnTimers['ghosts'].running) {
-        enemies['ghosts'].push(new Ghost(game.rnd.integerInRange(100, 400), 180));
-    } else {
-        spawnTimers['ghosts'].start();
-    }
+    // spawnTimers['ghosts'].add(3000, spawnGhosts, this);
+    // if (spawnTimers['ghosts'].running) {
+    //     enemies['ghosts'].push(new Ghost(game.rnd.integerInRange(100, 400), 180));
+    // } else {
+    //     spawnTimers['ghosts'].start();
+    // }
+    enemies['ghosts'].push(new Ghost(320, 320));
 }

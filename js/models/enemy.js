@@ -3,6 +3,7 @@ var Enemy = function(spriteX, spriteY, spritesheet) {
     game.physics.arcade.enable(this.sprite);
 
     this.nextDirection = 'stop';
+    this.block = '';
 }
 
 Enemy.prototype.update = function() {
@@ -26,13 +27,50 @@ Enemy.prototype.chasePlayer = function() {
         return;
     }
 
+    if (this.block === 'left' && this.sprite.body.blocked.left ||
+        this.block === 'right' && this.sprite.body.blocked.right ||
+        this.block === 'up' && this.sprite.body.blocked.up ||
+        this.block === 'down' && this.sprite.body.blocked.down) return;
+
     var dX = this.sprite.centerX - player.sprite.centerX;
     var dY = this.sprite.centerY - player.sprite.centerY;
 
     if (Math.abs(dX) > Math.abs(dY)) {
-        this.nextDirection = dX > 0 ? 'left' : 'right';
+        if (dX > 0) {
+            if (this.sprite.body.blocked.left) {
+                this.block = 'left';
+                this.nextDirection = dY > 0 ? 'up' : 'down';
+            } else {
+                this.block = '';
+                this.nextDirection = 'left';
+            }
+        } else {
+            if (this.sprite.body.blocked.right) {
+                this.block = 'right';
+                this.nextDirection = dY > 0 ? 'up' : 'down';
+            } else {
+                this.block = '';
+                this.nextDirection = 'right';
+            }
+        }
     } else {
-        this.nextDirection = dY > 0 ? 'up' : 'down';
+        if (dY > 0) {
+            if (this.sprite.body.blocked.up) {
+                this.block = 'up';
+                this.nextDirection = dX > 0 ? 'left' : 'right';
+            } else {
+                this.block = '';
+                this.nextDirection = 'up';
+            }
+        } else {
+            if (this.sprite.body.blocked.down) {
+                this.block = 'down';
+                this.nextDirection = dX > 0 ? 'left' : 'right';
+            } else {
+                this.block = '';
+                this.nextDirection = 'down';
+            }
+        }
     }
 }
 
