@@ -9,7 +9,7 @@ environment
 8 x 8
 
 player
-24 x 24
+32 x 16
 
 idle_00
 idle_01
@@ -40,7 +40,15 @@ swing_03
 ghost_fat
 24 x 24
 
-idle_walk_01
-idle_walk_03
+walk_01
+walk_03
 death_01
 death_03
+
+skelly
+16 x 16
+
+walk_00
+walk_01
+walk_02
+walk_03
