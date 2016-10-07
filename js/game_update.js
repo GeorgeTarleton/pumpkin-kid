@@ -12,7 +12,7 @@ function update() {
     game.physics.arcade.collide(entitiesLayer, collisionLayer);
     game.physics.arcade.collide(player.sprite, pumpkins.map(function(p) { return p.sprite }));
 
-    game.physics.arcade.overlap(player.meleeHitbox, entitiesLayer, knockbackEnemies, null, this);
+    game.physics.arcade.overlap(player.meleeHitbox, entitiesLayer, meleeDamage, null, this);
 
     player.update(cursors);
 
@@ -34,14 +34,14 @@ function update() {
     }
 }
 
-function knockbackEnemies(hitbox, enemy) {
+function meleeDamage(hitbox, enemy) {
     enemy.knockback = true;
     // find the enemy(s) that's being hit
     for (var type in enemies) {
         if (enemies.hasOwnProperty(type)) {
             enemies[type].forEach(function(e) {
                 if (e.sprite.knockback && !e.isKnockedBack) {
-                    e.takeDamage();
+                    e.takeDamage('melee');
                 }
             });
         }

@@ -89,13 +89,18 @@ Enemy.prototype.chasePlayer = function() {
     }
 }
 
-Enemy.prototype.takeDamageInternal = function() {
-    this.knockback();
+Enemy.prototype.takeDamageInternal = function(source) {
+    if (source === 'melee') {
+        this.knockback(100);
+    } else if (source === 'ranged') {
+        this.knockback(30);
+    }
+
 }
 
-Enemy.prototype.knockback = function() {
+Enemy.prototype.knockback = function(duration) {
     if (!this.isKnockedBack) {
-        this.knockbackTimer.add(100, function() { this.isKnockedBack = false; }, this);
+        this.knockbackTimer.add(duration, function() { this.isKnockedBack = false; }, this);
         this.knockbackTimer.start();
 
         this.isKnockedBack = true;
@@ -148,8 +153,8 @@ Ghost.prototype.update = function() {
     }
 }
 
-Ghost.prototype.takeDamage = function() {
-    this.takeDamageInternal();
+Ghost.prototype.takeDamage = function(source) {
+    this.takeDamageInternal(source);
 
     this.hp -= player.weapon.damage;
     if (this.hp <= 0) {
@@ -163,8 +168,15 @@ Ghost.prototype.takeDamage = function() {
     } else if (currentAnim === 'walk_left') {
         this.sprite.animations.play('damage_left');
     }
+    var duration;
+    if (source === 'melee') {
+        duration = 100;
+    } else if (source === 'ranged') {
+        duration = 30;
+    }
     var t = game.time.create(false);
-    t.add(100, function() { this.sprite.animations.play(currentAnim) }, this);
+    t.add(duration, function() { this.sprite.animations.play(currentAnim) }, this);
+    t.start();
 }
 
 Ghost.prototype.die = function() {
@@ -225,8 +237,8 @@ Skeleton.prototype.update = function() {
     }
 }
 
-Skeleton.prototype.takeDamage = function() {
-    this.takeDamageInternal();
+Skeleton.prototype.takeDamage = function(source) {
+    this.takeDamageInternal(source);
 
     this.hp -= player.weapon.damage;
     if (this.hp <= 0) {
