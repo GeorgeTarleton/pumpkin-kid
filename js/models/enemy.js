@@ -7,9 +7,12 @@ var Enemy = function(spriteX, spriteY, spritesheet) {
 
     this.nextDirection = 'stop';
     this.block = '';
+    this.prevDirection = 'stop';
+    this.frameMoved = 0;
 }
 
 Enemy.prototype.updateInternal = function() {
+    this.frameMoved = ++this.frameMoved % 10;
     if (this.isKnockedBack) return;
     this.chasePlayer();
     if (this.nextDirection === 'left') {
@@ -31,10 +34,12 @@ Enemy.prototype.chasePlayer = function() {
         return;
     }
 
-    if (this.block === 'left' && this.sprite.body.blocked.left ||
-        this.block === 'right' && this.sprite.body.blocked.right ||
-        this.block === 'up' && this.sprite.body.blocked.up ||
-        this.block === 'down' && this.sprite.body.blocked.down) return;
+    this.prevDirection = this.nextDirection;
+
+    // if (this.block === 'left' && this.sprite.body.blocked.left ||
+    //     this.block === 'right' && this.sprite.body.blocked.right ||
+    //     this.block === 'up' && this.sprite.body.blocked.up ||
+    //     this.block === 'down' && this.sprite.body.blocked.down) return;
 
     var dX = this.sprite.centerX - player.sprite.centerX;
     var dY = this.sprite.centerY - player.sprite.centerY;
@@ -75,6 +80,11 @@ Enemy.prototype.chasePlayer = function() {
                 this.nextDirection = 'down';
             }
         }
+    }
+
+
+    if (this.nextDirection !== this.prevDirection && this.frameMoved < 9 && this.prevDirection !== 'stop') {
+        this.nextDirection = this.prevDirection;
     }
 }
 
@@ -170,17 +180,7 @@ Skeleton.prototype.update = function() {
 
     if (this.isKnockedBack) return;
 
-    var vx = this.sprite.body.velocity.x;
-    var vy = this.sprite.body.velocity.y;
-    if (vx > 0) {
-        this.sprite.animations.play('walk_right');
-    } else if (vx < 0) {
-        this.sprite.animations.play('walk_left');
-    } else if (vy > 0) {
-        this.sprite.animations.play('walk_down');
-    } else {
-        this.sprite.animations.play('walk_up');
-    }
+    this.sprite.animations.play('walk_' + this.nextDirection);
 }
 
 Skeleton.prototype.takeDamage = function() {
