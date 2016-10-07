@@ -23,7 +23,7 @@ function render() {
     // enemies['ghosts'].forEach(function(g) {
         // game.debug.body(g.sprite)
     // });
-    game.debug.body(player.meleeHitbox);
+    // game.debug.body(player.meleeHitbox);
 
 
     // redraw game on scaled-up canvas

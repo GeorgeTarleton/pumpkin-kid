@@ -5,6 +5,8 @@ var Enemy = function(spriteX, spriteY, spritesheet) {
     this.isKnockedBack = false;
     this.knockbackTimer = game.time.create(false);
 
+    this.isDying = false;
+
     this.nextDirection = 'stop';
     this.block = '';
     this.prevDirection = 'stop';
@@ -13,7 +15,6 @@ var Enemy = function(spriteX, spriteY, spritesheet) {
 
 Enemy.prototype.updateInternal = function() {
     this.frameMoved = ++this.frameMoved % 10;
-    if (this.isKnockedBack) return;
     this.chasePlayer();
     if (this.nextDirection === 'left') {
         this.sprite.body.velocity.set(-this.speed, 0);
@@ -113,11 +114,16 @@ Enemy.prototype.knockback = function() {
 
 
 
+
+// ===== GHOST =====
+
 var Ghost = function(spriteX, spriteY) {
     Enemy.call(this, spriteX, spriteY, 'ghost');
 
     this.sprite.animations.add('walk_left', [0, 1, 2, 3], 8, true);
     this.sprite.animations.add('walk_right', [4, 5, 6, 7], 8, true);
+    this.sprite.animations.add('die_left', [8, 9, 10, 11], 8, true);
+    this.sprite.animations.add('die_right', [12, 13, 14, 15], 8, true);
     this.sprite.animations.add('damage_left', [16], 1, true);
     this.sprite.animations.add('damage_right', [17], 1, true);
     this.sprite.animations.play('walk_left');
@@ -125,14 +131,15 @@ var Ghost = function(spriteX, spriteY) {
     this.sprite.body.setSize(14, 14, 4, 6);
 
     this.speed = 15;
+    this.hp = 200;
 }
 
 Ghost.prototype = Object.create(Enemy.prototype);
 
 Ghost.prototype.update = function() {
+    if (this.isDying || this.isKnockedBack) return;
     this.updateInternal();
 
-    if (this.isKnockedBack) return;
 
     if (this.sprite.body.velocity.x > 0) {
         this.sprite.animations.play('walk_right');
@@ -144,6 +151,12 @@ Ghost.prototype.update = function() {
 Ghost.prototype.takeDamage = function() {
     this.takeDamageInternal();
 
+    this.hp -= player.weapon.damage;
+    if (this.hp <= 0) {
+        this.die();
+        return;
+    }
+
     var currentAnim = this.sprite.animations.currentAnim.name;
     if (currentAnim === 'walk_right') {
         this.sprite.animations.play('damage_right');
@@ -154,6 +167,21 @@ Ghost.prototype.takeDamage = function() {
     t.add(100, function() { this.sprite.animations.play(currentAnim) }, this);
 }
 
+Ghost.prototype.die = function() {
+    if (this.sprite.body.velocity.x > 0) {
+        this.sprite.animations.play('die_right', null, false, true);    // kill on complete
+    } else {
+        this.sprite.animations.play('die_left', null, false, true);
+    }
+    this.isDying = true;
+    this.sprite.body.velocity.set(0, 0);
+}
+
+
+
+
+
+// ===== SKELETON =====
 
 var Skeleton = function(spriteX, spriteY) {
     Enemy.call(this, spriteX, spriteY, 'skelly');
@@ -171,20 +199,40 @@ var Skeleton = function(spriteX, spriteY) {
     this.sprite.body.setSize(8, 14, 4, 2);
 
     this.speed = 25;
+    this.hp = 100;
 }
 
 Skeleton.prototype = Object.create(Enemy.prototype);
 
 Skeleton.prototype.update = function() {
+    if (this.isDying || this.isKnockedBack) return;
     this.updateInternal();
 
     if (this.isKnockedBack) return;
 
     this.sprite.animations.play('walk_' + this.nextDirection);
+
+    if (this.sprite.centerX - player.sprite.body.center.x < 16 &&
+        this.sprite.centerY - player.sprite.body.center.x < 12) {
+        this.nextDirection = 'stop';
+    }
+
+    console.log(this.sprite.centerX - player.sprite.body.center.x)
+    console.log(this.sprite.centerY - player.sprite.body.center.y)
+    if (Math.abs(this.sprite.centerX - player.sprite.body.center.x) < 18 &&
+        Math.abs(this.sprite.centerY - player.sprite.body.center.y) < 14) {
+        this.sprite.body.velocity.set(0, 0);
+    }
 }
 
 Skeleton.prototype.takeDamage = function() {
     this.takeDamageInternal();
+
+    this.hp -= player.weapon.damage;
+    if (this.hp <= 0) {
+        this.die();
+        return;
+    }
 
     var currentAnim = this.sprite.animations.currentAnim.name;
     if (currentAnim === 'walk_down') {
@@ -198,4 +246,10 @@ Skeleton.prototype.takeDamage = function() {
     }
     var t = game.time.create(false);
     t.add(100, function() { this.sprite.animations.play(currentAnim) }, this);
+}
+
+Skeleton.prototype.die = function() {
+    this.sprite.kill();
+    this.isDying = true;
+    this.sprite.body.velocity.set(0, 0);
 }
