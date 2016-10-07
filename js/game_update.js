@@ -7,7 +7,7 @@ function update() {
 
 
     game.physics.arcade.collide(player.sprite, collisionLayer);
-    game.physics.arcade.collide(player.sprite, entitiesLayer);
+    game.physics.arcade.collide(player.sprite, entitiesLayer, playerHit);
     game.physics.arcade.collide(entitiesLayer, entitiesLayer);
     game.physics.arcade.collide(entitiesLayer, collisionLayer);
     game.physics.arcade.collide(player.sprite, pumpkins.map(function(p) { return p.sprite }));
@@ -32,6 +32,24 @@ function update() {
             });
         }
     }
+}
+
+function playerHit(p, enemy) {
+    if (enemy.key === 'pumpkin') return;
+
+    // find the enemy that's hitting the player
+    enemy.hitting = true;
+    for (var type in enemies) {
+        if (enemies.hasOwnProperty(type)) {
+            enemies[type].forEach(function(e) {
+                if (e.sprite.hitting && !e.isAttacking) {
+                    e.attack();
+                    player.takeDamage(e);
+                }
+            });
+        }
+    }
+    enemy.hitting = false;
 }
 
 function meleeDamage(hitbox, enemy) {

@@ -101,21 +101,21 @@ function placePumpkins() {
 }
 
 function spawnGhosts() {
-    // spawnTimers.ghosts.add(3000, spawnGhosts, this);
-    // if (spawnTimers.ghosts.running) {
-    //     enemies['ghosts'].push(new Ghost(game.rnd.integerInRange(100, 400), 180));
-    // } else {
-    //     spawnTimers.ghosts.start();
-    // }
-    enemies['ghosts'].push(new Ghost(320, 320));
+    spawnTimers.ghosts.add(3000, spawnGhosts, this);
+    if (spawnTimers.ghosts.running) {
+        enemies['ghosts'].push(new Ghost(game.rnd.integerInRange(200, 400), 180));
+    } else {
+        spawnTimers.ghosts.start();
+    }
+    // enemies['ghosts'].push(new Ghost(320, 320));
 }
 
 function spawnSkeletons() {
-    // spawnTimers.skeletons.add(3000, spawnSkeletons, this);
-    // if (spawnTimers.skeletons.running) {
-    //     enemies['skeletons'].push(new Skeleton(game.rnd.integerInRange(100, 400), 180));
-    // } else {
-    //     spawnTimers.skeletons.start();
-    // }
-    enemies['skeletons'].push(new Skeleton(280, 320));
+    spawnTimers.skeletons.add(3000, spawnSkeletons, this);
+    if (spawnTimers.skeletons.running) {
+        enemies['skeletons'].push(new Skeleton(game.rnd.integerInRange(200, 400), 180));
+    } else {
+        spawnTimers.skeletons.start();
+    }
+    // enemies['skeletons'].push(new Skeleton(280, 320));
 }

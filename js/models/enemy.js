@@ -3,8 +3,7 @@ var Enemy = function(spriteX, spriteY, spritesheet) {
     game.physics.arcade.enable(this.sprite);
 
     this.isKnockedBack = false;
-    this.knockbackTimer = game.time.create(false);
-
+    this.isAttacking = false;
     this.isDying = false;
 
     this.nextDirection = 'stop';
@@ -100,8 +99,9 @@ Enemy.prototype.takeDamageInternal = function(source) {
 
 Enemy.prototype.knockback = function(duration) {
     if (!this.isKnockedBack) {
-        this.knockbackTimer.add(duration, function() { this.isKnockedBack = false; }, this);
-        this.knockbackTimer.start();
+        var knockbackTimer = game.time.create(false);
+        knockbackTimer.add(duration, function() { this.isKnockedBack = false; }, this);
+        knockbackTimer.start();
 
         this.isKnockedBack = true;
 
@@ -116,6 +116,15 @@ Enemy.prototype.knockback = function(duration) {
         }
     }
 }
+
+Enemy.prototype.attack = function() {
+    this.isAttacking = true;
+    var t = game.time.create(false);
+    t.add(this.attackSpeed, function() { this.isAttacking = false; }, this);
+    t.start();
+}
+
+
 
 
 
@@ -140,6 +149,10 @@ var Ghost = function(spriteX, spriteY) {
 }
 
 Ghost.prototype = Object.create(Enemy.prototype);
+
+Ghost.prototype.damage = 15;
+Ghost.prototype.knockbackDuration = false;
+Ghost.prototype.attackSpeed = 1000;
 
 Ghost.prototype.update = function() {
     if (this.isDying || this.isKnockedBack) return;
@@ -168,14 +181,9 @@ Ghost.prototype.takeDamage = function(source) {
     } else if (currentAnim === 'walk_left') {
         this.sprite.animations.play('damage_left');
     }
-    var duration;
-    if (source === 'melee') {
-        duration = 100;
-    } else if (source === 'ranged') {
-        duration = 30;
-    }
+
     var t = game.time.create(false);
-    t.add(duration, function() { this.sprite.animations.play(currentAnim) }, this);
+    t.add(100, function() { this.sprite.animations.play(currentAnim) }, this);
     t.start();
 }
 
@@ -216,6 +224,10 @@ var Skeleton = function(spriteX, spriteY) {
 
 Skeleton.prototype = Object.create(Enemy.prototype);
 
+Skeleton.prototype.damage = 25;
+Skeleton.prototype.knockbackDuration = 30;
+Skeleton.prototype.attackSpeed = 1000;
+
 Skeleton.prototype.update = function() {
     if (this.isDying || this.isKnockedBack) return;
     this.updateInternal();
@@ -229,12 +241,12 @@ Skeleton.prototype.update = function() {
         this.nextDirection = 'stop';
     }
 
-    console.log(this.sprite.centerX - player.sprite.body.center.x)
-    console.log(this.sprite.centerY - player.sprite.body.center.y)
-    if (Math.abs(this.sprite.centerX - player.sprite.body.center.x) < 18 &&
-        Math.abs(this.sprite.centerY - player.sprite.body.center.y) < 14) {
-        this.sprite.body.velocity.set(0, 0);
-    }
+    // console.log(this.sprite.centerX - player.sprite.body.center.x)
+    // console.log(this.sprite.centerY - player.sprite.body.center.y)
+    // if (Math.abs(this.sprite.centerX - player.sprite.body.center.x) < 18 &&
+    //     Math.abs(this.sprite.centerY - player.sprite.body.center.y) < 14) {
+    //     this.sprite.body.velocity.set(0, 0);
+    // }
 }
 
 Skeleton.prototype.takeDamage = function(source) {
@@ -256,8 +268,10 @@ Skeleton.prototype.takeDamage = function(source) {
     } else if (currentAnim === 'walk_right') {
         this.sprite.animations.play('damage_right');
     }
+
     var t = game.time.create(false);
     t.add(100, function() { this.sprite.animations.play(currentAnim) }, this);
+    t.start();
 }
 
 Skeleton.prototype.die = function() {

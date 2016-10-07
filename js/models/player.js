@@ -14,6 +14,10 @@ var Player = function(spriteX, spriteY) {
     this.sprite.animations.add('swing_left', [36, 37, 38, 39], 8, false);
     this.sprite.animations.add('swing_up', [40, 41, 42, 43], 8, false);
     this.sprite.animations.add('swing_right', [44, 45, 46, 47], 8, false);
+    this.sprite.animations.add('damage_down', [48], 1, true);
+    this.sprite.animations.add('damage_left', [49], 1, true);
+    this.sprite.animations.add('damage_up', [50], 1, true);
+    this.sprite.animations.add('damage_right', [51], 1, true);
     this.sprite.animations.play('idle_down');
 
     game.physics.arcade.enable(this.sprite);
@@ -37,6 +41,8 @@ var Player = function(spriteX, spriteY) {
 
     this.attacking = false;
 
+    this.isKnockedBack = false;
+
 
     this.visionMask = game.make.sprite(this.sprite.centerX, this.sprite.centerY, 'mask_40');
     this.visionMask.frame = 0;
@@ -44,10 +50,13 @@ var Player = function(spriteX, spriteY) {
 
     this.visionRadius = 40;
 
+    this.hp = 100;
     this.alive = true;
 }
 
 Player.prototype.update = function(cursors) {
+    if (this.isKnockedBack) return;
+
     // only enable melee hitbox for a short duration within the attack animation
     if (this.attackTimer && this.attackTimer.ms >= 400) {
         this.meleeHitbox.body.enable = false;
@@ -133,4 +142,44 @@ Player.prototype.afterAttack = function() {
     } else {
         this.meleeHitbox.body.enable = false;
     }
+}
+
+Player.prototype.takeDamage = function(source) {
+    var currentAnim = this.sprite.animations.currentAnim.name;
+    if (currentAnim.match(/(down)/)) {
+        this.sprite.animations.play('damage_down');
+    } else if (currentAnim.match(/(left)/)) {
+        this.sprite.animations.play('damage_left');
+    } else if (currentAnim.match(/(up)/)) {
+        this.sprite.animations.play('damage_up');
+    } else if (currentAnim.match(/(right)/)) {
+        this.sprite.animations.play('damage_right');
+    }
+
+    var t = game.time.create(false);
+    t.add(100, function() { this.sprite.animations.play(currentAnim) }, this);
+    t.start();
+
+    var duration = source.knockbackDuration;
+    if (duration && !this.isKnockedBack) {
+
+        var knockbackTimer = game.time.create(false);
+        knockbackTimer.add(duration, function() { this.isKnockedBack = false; }, this);
+        knockbackTimer.start();
+
+        this.isKnockedBack = true;
+
+        console.log(source.nextDirection);
+        if (source.nextDirection == 'down') {
+            this.sprite.body.velocity.set(0, 150);
+        } else if (source.nextDirection == 'up') {
+            this.sprite.body.velocity.set(0, -150);
+        } else if (source.nextDirection == 'left') {
+            this.sprite.body.velocity.set(-150, 0);
+        } else if (source.nextDirection == 'right') {
+            this.sprite.body.velocity.set(150, 0);
+        }
+    }
+
+
 }
