@@ -78,8 +78,12 @@ Enemy.prototype.chasePlayer = function() {
     }
 }
 
-Enemy.prototype.knockback = function(direction) {
-    if (this.knockbackTimer.expired || !this.knockbackTimer.running) {
+Enemy.prototype.takeDamageInternal = function() {
+    this.knockback();
+}
+
+Enemy.prototype.knockback = function() {
+    if (!this.isKnockedBack) {
         this.knockbackTimer.add(100, function() { this.isKnockedBack = false; }, this);
         this.knockbackTimer.start();
 
@@ -104,6 +108,8 @@ var Ghost = function(spriteX, spriteY) {
 
     this.sprite.animations.add('walk_left', [0, 1, 2, 3], 8, true);
     this.sprite.animations.add('walk_right', [4, 5, 6, 7], 8, true);
+    this.sprite.animations.add('damage_left', [16], 1, true);
+    this.sprite.animations.add('damage_right', [17], 1, true);
     this.sprite.animations.play('walk_left');
 
     this.sprite.body.setSize(14, 14, 4, 6);
@@ -125,6 +131,19 @@ Ghost.prototype.update = function() {
     }
 }
 
+Ghost.prototype.takeDamage = function() {
+    this.takeDamageInternal();
+
+    var currentAnim = this.sprite.animations.currentAnim.name;
+    if (currentAnim === 'walk_right') {
+        this.sprite.animations.play('damage_right');
+    } else if (currentAnim === 'walk_left') {
+        this.sprite.animations.play('damage_left');
+    }
+    var t = game.time.create(false);
+    t.add(100, function() { this.sprite.animations.play(currentAnim) }, this);
+}
+
 
 var Skeleton = function(spriteX, spriteY) {
     Enemy.call(this, spriteX, spriteY, 'skelly');
@@ -133,6 +152,10 @@ var Skeleton = function(spriteX, spriteY) {
     this.sprite.animations.add('walk_left', [4, 5, 6, 7], 8, true);
     this.sprite.animations.add('walk_up', [8, 9, 10, 11], 8, true);
     this.sprite.animations.add('walk_right', [12, 13, 14, 15], 8, true);
+    this.sprite.animations.add('damage_down', [32], 1, true);
+    this.sprite.animations.add('damage_left', [33], 1, true);
+    this.sprite.animations.add('damage_up', [34], 1, true);
+    this.sprite.animations.add('damage_right', [35], 1, true);
     this.sprite.animations.play('walk_down');
 
     this.sprite.body.setSize(8, 14, 4, 2);
@@ -158,4 +181,21 @@ Skeleton.prototype.update = function() {
     } else {
         this.sprite.animations.play('walk_up');
     }
+}
+
+Skeleton.prototype.takeDamage = function() {
+    this.takeDamageInternal();
+
+    var currentAnim = this.sprite.animations.currentAnim.name;
+    if (currentAnim === 'walk_down') {
+        this.sprite.animations.play('damage_down');
+    } else if (currentAnim === 'walk_left') {
+        this.sprite.animations.play('damage_left');
+    } else if (currentAnim === 'walk_up') {
+        this.sprite.animations.play('damage_up');
+    } else if (currentAnim === 'walk_right') {
+        this.sprite.animations.play('damage_right');
+    }
+    var t = game.time.create(false);
+    t.add(100, function() { this.sprite.animations.play(currentAnim) }, this);
 }

@@ -36,11 +36,12 @@ function update() {
 
 function knockbackEnemies(hitbox, enemy) {
     enemy.knockback = true;
+    // find the enemy(s) that's being hit
     for (var type in enemies) {
         if (enemies.hasOwnProperty(type)) {
             enemies[type].forEach(function(e) {
                 if (e.sprite.knockback && !e.isKnockedBack) {
-                    e.knockback();
+                    e.takeDamage();
                 }
             });
         }
