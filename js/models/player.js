@@ -1,3 +1,8 @@
+// player states
+FREE = 0, ROOTED = 1, KNOCKED_BACK = 2;
+DEFAULT = 0, ATTACKING = 1, ATTACKED = 2;
+
+
 var Player = function(spriteX, spriteY) {
     this.sprite = playerLayer.create(spriteX, spriteY, 'player');
     this.sprite.anchor.set(0.5, 0.5);      // needed to center camera properly
@@ -28,6 +33,7 @@ var Player = function(spriteX, spriteY) {
     this.sprite.body.setSize(16, 8, 8, 8);
 
 
+    // player weapons
     this.weapon = new Weapon(
         playerLayer.create(-16, -16, 'shovel')
     );
@@ -38,11 +44,9 @@ var Player = function(spriteX, spriteY) {
     game.physics.arcade.enable(this.meleeHitbox);
     this.meleeHitbox.body.enable = false;
 
-
-    this.attacking = false;
-
-    this.isKnockedBack = false;
-
+    // player states
+    this.movementState = FREE;
+    this.animationState = DEFAULT;
 
     this.visionMask = game.make.sprite(this.sprite.centerX, this.sprite.centerY, 'mask_40');
     this.visionMask.frame = 0;
@@ -55,44 +59,63 @@ var Player = function(spriteX, spriteY) {
 }
 
 Player.prototype.update = function(cursors) {
-    if (this.isKnockedBack) return;
+    // debug
+    // console.log(this.animationState + ' ' + this.movementState);
 
     // only enable melee hitbox for a short duration within the attack animation
-    if (this.attackTimer && this.attackTimer.ms >= 400) {
+    if (this.weapon.attackTimer && this.weapon.attackTimer.ms >= 400) {
         this.meleeHitbox.body.enable = false;
-    } else if (this.attackTimer && this.attackTimer.ms >= 200) {
+    } else if (this.weapon.attackTimer && this.weapon.attackTimer.ms >= 200) {
         this.meleeHitbox.body.enable = true;
     }
 
-    if (this.attacking) return;
+    var direction = 'stop';
+    if (cursors.up.isDown)          direction = 'up';
+    else if (cursors.down.isDown)   direction = 'down';
+    else if (cursors.left.isDown)   direction = 'left';
+    else if (cursors.right.isDown)  direction = 'right';
 
     var currentAnim = this.sprite.animations.currentAnim;
+    switch(this.animationState) {
+        case DEFAULT:
+            if (direction === 'stop') {
+                this.sprite.animations.play('idle_' + this.lastDirection);
+                this.weapon.sprite.animations.play('idle_' + this.lastDirection);
+            } else {
+                this.sprite.animations.play('walk_' + direction);
+                this.weapon.sprite.animations.play('walk_' + direction);
+            }
+            break;
+        case ATTACKING:
+            this.sprite.animations.play('swing_' + this.lastDirection);
+            this.weapon.sprite.animations.play('swing_' + this.lastDirection);
+            break;
+        case ATTACKED:
+            this.sprite.animations.play('damage_' + this.lastDirection);
+            this.weapon.sprite.animations.play('damage_' + this.lastDirection);
+            break;
+    }
 
-    this.sprite.body.velocity.set(0, 0);
-
-    if (cursors.up.isDown) {
-        this.sprite.body.velocity.set(0, -100);
-        this.sprite.animations.play('walk_up');
-        this.weapon.sprite.animations.play('walk_up');
-        this.lastDirection = 'up';
-    } else if (cursors.down.isDown) {
-        this.sprite.body.velocity.set(0, 100);
-        this.sprite.animations.play('walk_down');
-        this.weapon.sprite.animations.play('walk_down');
-        this.lastDirection = 'down';
-    } else if (cursors.left.isDown) {
-        this.sprite.body.velocity.set(-100, 0);
-        this.sprite.animations.play('walk_left');
-        this.weapon.sprite.animations.play('walk_left');
-        this.lastDirection = 'left';
-    } else if (cursors.right.isDown) {
-        this.sprite.body.velocity.set(100, 0);
-        this.sprite.animations.play('walk_right');
-        this.weapon.sprite.animations.play('walk_right');
-        this.lastDirection = 'right';
-    } else {
-        this.sprite.animations.play('idle_' + this.lastDirection);
-        this.weapon.sprite.animations.play('idle_' + this.lastDirection);
+    switch(this.movementState) {
+        case FREE:
+            if (direction === 'up') {
+                this.sprite.body.velocity.set(0, -100);
+            } else if (direction === 'down') {
+                this.sprite.body.velocity.set(0, 100);
+            } else if (direction === 'left') {
+                this.sprite.body.velocity.set(-100, 0);
+            } else if (direction === 'right') {
+                this.sprite.body.velocity.set(100, 0);
+            } else if (direction === 'stop') {
+                this.sprite.body.velocity.set(0, 0);
+            }
+            if (direction !== 'stop') this.lastDirection = direction;
+            break;
+        case ROOTED:
+            this.sprite.body.velocity.set(0, 0);
+            break;
+        case KNOCKED_BACK:
+            break;
     }
 }
 
@@ -109,15 +132,11 @@ Player.prototype.updateVisionMask = function() {
 }
 
 Player.prototype.attack = function() {
-    if (!this.attacking) {
-        this.attackTimer = game.time.create(false);
-        this.attackTimer.add(this.weapon.attackTime, this.afterAttack, this);
-        this.attackTimer.start();
+    if (this.movementState === FREE && this.weapon.canUse) {
+        this.weapon.use(this.afterAttack);
 
-        this.sprite.animations.play('swing_' + this.lastDirection);
-        this.weapon.sprite.animations.play('swing_' + this.lastDirection);
-
-        this.attacking = true;
+        this.movementState = ROOTED;
+        this.animationState = ATTACKING;
         this.sprite.body.velocity.set(0, 0);
 
         if (this.lastDirection == 'down') {
@@ -133,18 +152,17 @@ Player.prototype.attack = function() {
 }
 
 Player.prototype.afterAttack = function() {
-    this.attackTimer.destroy();
-    this.sprite.animations.play('idle_' + this.lastDirection);
-    this.weapon.sprite.animations.play('idle_' + this.lastDirection);
-    this.attacking = false;
-    if (keyAttack.isDown) {
-        this.attack();
-    } else {
-        this.meleeHitbox.body.enable = false;
+    if (this.animationState === ATTACKING) {
+        this.animationState = DEFAULT;
+    }
+    if (this.movementState === ROOTED) {
+        this.movementState = FREE;
     }
 }
 
 Player.prototype.takeDamage = function(source) {
+    this.animationState = ATTACKED;
+
     var currentAnim = this.sprite.animations.currentAnim.name;
     if (currentAnim.match(/(down)/)) {
         this.sprite.animations.play('damage_down');
@@ -156,20 +174,18 @@ Player.prototype.takeDamage = function(source) {
         this.sprite.animations.play('damage_right');
     }
 
-    var t = game.time.create(false);
-    t.add(100, function() { this.sprite.animations.play(currentAnim) }, this);
+    var t = game.time.create(true);
+    t.add(100, function() { if (this.animationState === ATTACKED) this.animationState = DEFAULT }, this);
     t.start();
 
     var duration = source.knockbackDuration;
-    if (duration && !this.isKnockedBack) {
+    if (duration && this.movementState !== KNOCKED_BACK) {
+        this.movementState = KNOCKED_BACK;
 
-        var knockbackTimer = game.time.create(false);
-        knockbackTimer.add(duration, function() { this.isKnockedBack = false; }, this);
+        var knockbackTimer = game.time.create(true);
+        knockbackTimer.add(duration, function() { this.movementState = FREE; }, this);
         knockbackTimer.start();
 
-        this.isKnockedBack = true;
-
-        console.log(source.nextDirection);
         if (source.nextDirection == 'down') {
             this.sprite.body.velocity.set(0, 150);
         } else if (source.nextDirection == 'up') {

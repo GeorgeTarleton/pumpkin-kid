@@ -225,7 +225,7 @@ var Skeleton = function(spriteX, spriteY) {
 Skeleton.prototype = Object.create(Enemy.prototype);
 
 Skeleton.prototype.damage = 25;
-Skeleton.prototype.knockbackDuration = 30;
+Skeleton.prototype.knockbackDuration = 40;
 Skeleton.prototype.attackSpeed = 1000;
 
 Skeleton.prototype.update = function() {
@@ -235,11 +235,6 @@ Skeleton.prototype.update = function() {
     if (this.isKnockedBack) return;
 
     this.sprite.animations.play('walk_' + this.nextDirection);
-
-    if (this.sprite.centerX - player.sprite.body.center.x < 16 &&
-        this.sprite.centerY - player.sprite.body.center.x < 12) {
-        this.nextDirection = 'stop';
-    }
 
     // console.log(this.sprite.centerX - player.sprite.body.center.x)
     // console.log(this.sprite.centerY - player.sprite.body.center.y)
