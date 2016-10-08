@@ -94,7 +94,11 @@ Enemy.prototype.takeDamageInternal = function(source) {
     } else if (source === 'ranged') {
         this.knockback(30);
     }
-
+    this.hp -= player.weapon.damage;
+    if (this.hp <= 0) {
+        this.die();
+        return;
+    }
 }
 
 Enemy.prototype.knockback = function(duration) {
@@ -169,12 +173,6 @@ Ghost.prototype.update = function() {
 Ghost.prototype.takeDamage = function(source) {
     this.takeDamageInternal(source);
 
-    this.hp -= player.weapon.damage;
-    if (this.hp <= 0) {
-        this.die();
-        return;
-    }
-
     var currentAnim = this.sprite.animations.currentAnim.name;
     if (currentAnim === 'walk_right') {
         this.sprite.animations.play('damage_right');
@@ -246,12 +244,6 @@ Skeleton.prototype.update = function() {
 
 Skeleton.prototype.takeDamage = function(source) {
     this.takeDamageInternal(source);
-
-    this.hp -= player.weapon.damage;
-    if (this.hp <= 0) {
-        this.die();
-        return;
-    }
 
     var currentAnim = this.sprite.animations.currentAnim.name;
     if (currentAnim === 'walk_down') {
