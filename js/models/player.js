@@ -34,9 +34,11 @@ var Player = function(spriteX, spriteY) {
 
 
     // player weapons
-    this.weapon = new Weapon(
-        playerLayer.create(-16, -16, 'shovel')
-    );
+    this.weapons = [
+        new Shovel(-16, -16),
+        new Gun(0, 0)
+    ];
+    this.weapon = this.weapons[0];
     this.sprite.addChild(this.weapon.sprite);
 
     this.meleeHitbox = playerLayer.create(0, 0, 'melee_hitbox');
@@ -60,7 +62,7 @@ var Player = function(spriteX, spriteY) {
 
 Player.prototype.update = function(cursors) {
     // debug
-    // console.log(this.animationState + ' ' + this.movementState);
+    console.log(this.animationState + ' ' + this.movementState);
 
     // only enable melee hitbox for a short duration within the attack animation
     if (this.weapon.attackTimer && this.weapon.attackTimer.ms >= 400) {
