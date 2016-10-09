@@ -141,9 +141,11 @@ Player.prototype.updateVisionMask = function() {
 }
 
 Player.prototype.switchWeapon = function() {
-    this.weapon.sprite.visible = false;     // hide previous weapon
-    this.weapon = this.weapons[(++this.weaponId % 2)];
-    this.weapon.sprite.visible = true;      // show current weapon
+    if (this.movementState === FREE) {
+        this.weapon.sprite.visible = false;     // hide previous weapon
+        this.weapon = this.weapons[(++this.weaponId % 2)];
+        this.weapon.sprite.visible = true;      // show current weapon
+    }
 }
 
 Player.prototype.attack = function() {
