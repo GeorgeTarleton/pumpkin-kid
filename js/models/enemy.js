@@ -209,6 +209,10 @@ var Skeleton = function(spriteX, spriteY) {
     this.sprite.animations.add('walk_left', [4, 5, 6, 7], 8, true);
     this.sprite.animations.add('walk_up', [8, 9, 10, 11], 8, true);
     this.sprite.animations.add('walk_right', [12, 13, 14, 15], 8, true);
+    this.sprite.animations.add('die_down', [16, 17, 18, 19], 8, true);
+    this.sprite.animations.add('die_left', [20, 21, 22, 23], 8, true);
+    this.sprite.animations.add('die_up', [24, 25, 26, 27], 8, true);
+    this.sprite.animations.add('die_right', [28, 29, 30, 31], 8, true);
     this.sprite.animations.add('damage_down', [32], 1, true);
     this.sprite.animations.add('damage_left', [33], 1, true);
     this.sprite.animations.add('damage_up', [34], 1, true);
@@ -263,7 +267,17 @@ Skeleton.prototype.takeDamage = function(source) {
 }
 
 Skeleton.prototype.die = function() {
-    this.sprite.kill();
+    var currentAnim = this.sprite.animations.currentAnim.name;
+    if (currentAnim === 'walk_down') {
+        this.sprite.animations.play('die_down', null, false, true);    // kill on complete
+    } else if (currentAnim === 'walk_left') {
+        this.sprite.animations.play('die_left', null, false, true);
+    } else if (currentAnim === 'walk_up') {
+        this.sprite.animations.play('die_up', null, false, true);
+    } else if (currentAnim === 'walk_right') {
+        this.sprite.animations.play('die_right', null, false, true);
+    }
     this.isDying = true;
     this.sprite.body.velocity.set(0, 0);
+    this.sprite.body.enable = false;
 }
