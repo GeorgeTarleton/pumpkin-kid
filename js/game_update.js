@@ -10,6 +10,8 @@ function update() {
     game.physics.arcade.collide(player.sprite, entitiesLayer, playerHit);
     game.physics.arcade.collide(entitiesLayer, entitiesLayer);
     game.physics.arcade.collide(entitiesLayer, collisionLayer);
+    game.physics.arcade.collide(bulletsLayer, collisionLayer, bulletHitObject, null, this);
+    game.physics.arcade.collide(bulletsLayer, entitiesLayer, bulletHitEnemy, null, this);
     game.physics.arcade.collide(player.sprite, pumpkins.map(function(p) { return p.sprite }));
 
     game.physics.arcade.overlap(player.meleeHitbox, entitiesLayer, meleeDamage, null, this);
@@ -65,4 +67,25 @@ function meleeDamage(hitbox, enemy) {
         }
     }
     enemy.knockback = false;
+}
+
+function bulletHitObject(bullet, collisionObject) {
+    bullet.kill();
+}
+
+function bulletHitEnemy(bullet, enemy) {
+    bullet.kill();
+    if (enemy.key === 'pumpkin') return;
+
+    enemy.shot = true;
+    for (var type in enemies) {
+        if (enemies.hasOwnProperty(type)) {
+            enemies[type].forEach(function(e) {
+                if (e.sprite.shot) {
+                    e.takeDamage('ranged');
+                }
+            });
+        }
+    }
+    enemy.shot = false;
 }

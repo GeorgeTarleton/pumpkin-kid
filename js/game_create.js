@@ -4,7 +4,7 @@ var player_mask;
 
 var map;
 var groundLayer, bottomLayer, midLayer, topLayer, aboveLayer, collisionLayer;
-var entitiesLayer, playerLayer;
+var entitiesLayer, playerLayer, bulletsLayer;
 
 var player;
 var pumpkins = [];
@@ -36,6 +36,7 @@ function create() {
 
     // create player & player-interactable objects between appropriate layers
     entitiesLayer = game.add.group();
+    bulletsLayer = game.add.group();
     playerLayer = game.add.group();
 
     midLayer = map.createLayer('middle');
@@ -101,7 +102,7 @@ function placePumpkins() {
 }
 
 function spawnGhosts() {
-    spawnTimers.ghosts.add(3000, spawnGhosts, this);
+    spawnTimers.ghosts.add(5000, spawnGhosts, this);
     if (spawnTimers.ghosts.running) {
         enemies['ghosts'].push(new Ghost(game.rnd.integerInRange(200, 400), 180));
     } else {
@@ -111,7 +112,7 @@ function spawnGhosts() {
 }
 
 function spawnSkeletons() {
-    spawnTimers.skeletons.add(3000, spawnSkeletons, this);
+    spawnTimers.skeletons.add(5000, spawnSkeletons, this);
     if (spawnTimers.skeletons.running) {
         enemies['skeletons'].push(new Skeleton(game.rnd.integerInRange(200, 400), 180));
     } else {

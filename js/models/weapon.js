@@ -4,7 +4,7 @@ var Weapon = function(spriteX, spriteY, spritesheet) {
     this.canUse = true;
 }
 
-Weapon.prototype.use = function(callback) {
+Weapon.prototype.useInternal = function(callback) {
     this.canUse = false;
 
     var s = game.time.create(true);
@@ -17,7 +17,6 @@ Weapon.prototype.use = function(callback) {
     this.attackTimer = game.time.create(true);
     this.attackTimer.add(this.attackAnimationTime, callback, player);
     this.attackTimer.start();
-
 };
 
 
@@ -49,7 +48,9 @@ var Shovel = function(spriteX, spriteY) {
 
 Shovel.prototype = Object.create(Weapon.prototype);
 
-
+Shovel.prototype.use = function(callback) {
+    this.useInternal(callback);
+}
 
 
 
@@ -57,5 +58,29 @@ Shovel.prototype = Object.create(Weapon.prototype);
 // ===== GUN =====
 
 var Gun = function(spriteX, spriteY) {
-    Weapon.call(this, spriteX, spriteY, 'gun');
+    Weapon.call(this, spriteX, spriteY, 'bullet');
+
+    this.attackAnimationTime = 300;
+    this.attackTime = 300;
+    this.damage = 20;
 }
+
+Gun.prototype = Object.create(Weapon.prototype);
+
+Gun.prototype.use = function(callback) {
+    this.useInternal(callback);
+
+    var bullet = bulletsLayer.create(player.sprite.centerX, player.sprite.centerY, 'bullet');
+    bullet.anchor.set(0.5, 0.5);
+    game.physics.arcade.enable(bullet);
+    if (player.lastDirection == 'down') {
+        bullet.body.velocity.set(0, 200);
+    } else if (player.lastDirection == 'up') {
+        bullet.body.velocity.set(0, -200);
+    } else if (player.lastDirection == 'left') {
+        bullet.body.velocity.set(-200, 0);
+    } else if (player.lastDirection == 'right') {
+        bullet.body.velocity.set(200, 0);
+    }
+}
+

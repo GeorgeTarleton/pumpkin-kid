@@ -38,7 +38,7 @@ var Player = function(spriteX, spriteY) {
         new Shovel(-16, -16),
         new Gun(0, 0)
     ];
-    this.weapon = this.weapons[0];
+    this.weapon = this.weapons[1];
     this.sprite.addChild(this.weapon.sprite);
 
     this.meleeHitbox = playerLayer.create(0, 0, 'melee_hitbox');
@@ -65,10 +65,12 @@ Player.prototype.update = function(cursors) {
     console.log(this.animationState + ' ' + this.movementState);
 
     // only enable melee hitbox for a short duration within the attack animation
-    if (this.weapon.attackTimer && this.weapon.attackTimer.ms >= 400) {
-        this.meleeHitbox.body.enable = false;
-    } else if (this.weapon.attackTimer && this.weapon.attackTimer.ms >= 200) {
-        this.meleeHitbox.body.enable = true;
+    if (this.weapon.sprite.key === 'shovel') {
+        if (this.weapon.attackTimer && this.weapon.attackTimer.ms >= 400) {
+            this.meleeHitbox.body.enable = false;
+        } else if (this.weapon.attackTimer && this.weapon.attackTimer.ms >= 200) {
+            this.meleeHitbox.body.enable = true;
+        }
     }
 
     var direction = 'stop';
@@ -137,18 +139,22 @@ Player.prototype.attack = function() {
     if (this.movementState === FREE && this.weapon.canUse) {
         this.weapon.use(this.afterAttack);
 
-        this.movementState = ROOTED;
-        this.animationState = ATTACKING;
-        this.sprite.body.velocity.set(0, 0);
+        if (this.weapon.sprite.key === 'shovel') {
+            this.animationState = ATTACKING;
+            this.movementState = ROOTED;
+            this.sprite.body.velocity.set(0, 0);
 
-        if (this.lastDirection == 'down') {
-            this.meleeHitbox.body.setSize(16, 16, -8, 0);
-        } else if (this.lastDirection == 'up') {
-            this.meleeHitbox.body.setSize(16, 16, -8, -16);
-        } else if (this.lastDirection == 'left') {
-            this.meleeHitbox.body.setSize(24, 16, -24, -8);
-        } else if (this.lastDirection == 'right') {
-            this.meleeHitbox.body.setSize(24, 16, 0, -8);
+            if (this.lastDirection == 'down') {
+                this.meleeHitbox.body.setSize(16, 16, -8, 0);
+            } else if (this.lastDirection == 'up') {
+                this.meleeHitbox.body.setSize(16, 16, -8, -16);
+            } else if (this.lastDirection == 'left') {
+                this.meleeHitbox.body.setSize(24, 16, -24, -8);
+            } else if (this.lastDirection == 'right') {
+                this.meleeHitbox.body.setSize(24, 16, 0, -8);
+            }
+        } else {
+
         }
     }
 }
@@ -166,13 +172,13 @@ Player.prototype.takeDamage = function(source) {
     this.animationState = ATTACKED;
 
     var currentAnim = this.sprite.animations.currentAnim.name;
-    if (currentAnim.match(/(down)/)) {
+    if (this.lastDirection == 'down') {
         this.sprite.animations.play('damage_down');
-    } else if (currentAnim.match(/(left)/)) {
+    } else if (this.lastDirection == 'left') {
         this.sprite.animations.play('damage_left');
-    } else if (currentAnim.match(/(up)/)) {
+    } else if (this.lastDirection == 'up') {
         this.sprite.animations.play('damage_up');
-    } else if (currentAnim.match(/(right)/)) {
+    } else if (this.lastDirection == 'right') {
         this.sprite.animations.play('damage_right');
     }
 
