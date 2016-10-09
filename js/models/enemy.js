@@ -29,7 +29,7 @@ Enemy.prototype.updateInternal = function() {
 }
 
 Enemy.prototype.chasePlayer = function() {
-    if (!player.alive) {
+    if (!player.sprite.alive) {
         this.nextDirection = 'stop';
         return;
     }
