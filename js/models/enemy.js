@@ -228,7 +228,7 @@ var Skeleton = function(spriteX, spriteY) {
 Skeleton.prototype = Object.create(Enemy.prototype);
 
 Skeleton.prototype.damage = 25;
-Skeleton.prototype.knockbackDuration = 40;
+Skeleton.prototype.knockbackDuration = 60;
 Skeleton.prototype.attackSpeed = 1000;
 
 Skeleton.prototype.update = function() {
