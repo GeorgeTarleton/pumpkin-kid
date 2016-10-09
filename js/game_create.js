@@ -33,13 +33,13 @@ function create() {
     collisionLayer = map.createLayer('collision');
     groundLayer = map.createLayer('ground');
     bottomLayer = map.createLayer('bottom');
+    midLayer = map.createLayer('middle');
 
     // create player & player-interactable objects between appropriate layers
     entitiesLayer = game.add.group();
     bulletsLayer = game.add.group();
     playerLayer = game.add.group();
 
-    midLayer = map.createLayer('middle');
     topLayer = map.createLayer('top');
     aboveLayer = map.createLayer('above');
 
@@ -102,9 +102,15 @@ function switchWeapon() {
 
 function placePumpkins() {
     pumpkins.push(
-        new Pumpkin(192, 192),
-        new Pumpkin(384, 192),
-        new Pumpkin(384, 384)
+        new Pumpkin(27*8, 23*8),
+        new Pumpkin(55*8, 39*8),
+        new Pumpkin(47*8, 23*8),
+        new Pumpkin(30*8, 33*8),
+        new Pumpkin(36*8, 49*8),
+        new Pumpkin(48*8, 59*8),
+        new Pumpkin(18*8, 57*8),
+        new Pumpkin(30*8, 11*8),
+        new Pumpkin(20*8, 43*8)
     );
 }
 
