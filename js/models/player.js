@@ -38,7 +38,8 @@ var Player = function(spriteX, spriteY) {
         new Shovel(-16, -16),
         new Gun(0, 0)
     ];
-    this.weapon = this.weapons[1];
+    this.weaponId = 0;
+    this.weapon = this.weapons[this.weaponId];
     this.sprite.addChild(this.weapon.sprite);
 
     this.meleeHitbox = playerLayer.create(0, 0, 'melee_hitbox');
@@ -92,7 +93,7 @@ Player.prototype.update = function(cursors) {
             break;
         case ATTACKING:
             this.sprite.animations.play('swing_' + this.lastDirection);
-            this.weapon.sprite.animations.play('swing_' + this.lastDirection);
+            this.weapon.sprite.animations.play('use_' + this.lastDirection);
             break;
         case ATTACKED:
             this.sprite.animations.play('damage_' + this.lastDirection);
@@ -133,6 +134,12 @@ Player.prototype.updateVisionMask = function() {
     this.visionMask.x = Math.round(this.sprite.centerX);
     this.visionMask.y = Math.round(this.sprite.centerY);
     bitmap.draw(this.visionMask);
+}
+
+Player.prototype.switchWeapon = function() {
+    this.weapon.sprite.visible = false;     // hide previous weapon
+    this.weapon = this.weapons[(++this.weaponId % 2)];
+    this.weapon.sprite.visible = true;      // show current weapon
 }
 
 Player.prototype.attack = function() {

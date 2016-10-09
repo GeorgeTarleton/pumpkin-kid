@@ -15,7 +15,7 @@ var enemies = {
 var spawnTimers = {}
 
 var cursors;
-var keyPumpkin, keyAttack;
+var keyPumpkin, keyAttack, keyWeapon;
 
 function create() {
     console.log("Game created");
@@ -76,6 +76,9 @@ function create() {
     keyAttack = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     keyAttack.onDown.add(attack, this);
 
+    keyWeapon = game.input.keyboard.addKey(Phaser.Keyboard.X);
+    keyWeapon.onDown.add(switchWeapon, this);
+
     game.camera.follow(player.sprite);
 }
 
@@ -91,6 +94,10 @@ function togglePumpkin() {
             break;
         }
     }
+}
+
+function switchWeapon() {
+    player.switchWeapon();
 }
 
 function placePumpkins() {
