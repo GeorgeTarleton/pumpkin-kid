@@ -36,6 +36,11 @@ SpookyGame.Preloader.prototype = {
         game.load.spritesheet('ghost', 'assets/ghost_fat.gif', 24, 24);
         game.load.spritesheet('skelly', 'assets/skelly.gif', 16, 16);
 
+        // item spreadsheets
+        game.load.spritesheet('candy', 'assets/candy.gif', 16, 16);
+        game.load.spritesheet('candle', 'assets/candle.gif', 16, 16);
+        game.load.spritesheet('loot', 'assets/loot.gif', 16, 16);
+
         game.load.image('melee_hitbox', 'assets/melee_hitbox.gif');
         game.load.image('bullet', 'assets/bullet.gif');
 

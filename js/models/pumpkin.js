@@ -19,13 +19,43 @@ var Pumpkin = function(spriteX, spriteY) {
     this.visionClockStart = game.rnd.integerInRange(0, 40);
 }
 
+Pumpkin.prototype.spawnItem = function() {
+    this.itemSpawnClock.add(game.rnd.integerInRange(7500, 12500), this.spawnItem, this);
+    if (this.itemSpawnClock.running) {
+        var itemKey;
+        var rand = game.rnd.integerInRange(1, 100);
+        if (rand <= 33) {
+            itemKey = 'candy';
+        } else if (rand <= 67) {
+            itemKey = 'candle';
+        } else {
+            itemKey = 'loot';
+        }
+
+        // spawn within radius 16 to 50 from the center of pumpkin
+        var item = itemsLayer.create(
+            this.sprite.centerX + game.rnd.integerInRange(16, 50) * (game.rnd.integerInRange(0, 1) ? -1 : 1),
+            this.sprite.centerY + game.rnd.integerInRange(16, 50) * (game.rnd.integerInRange(0, 1) ? -1 : 1),
+            itemKey
+        );
+        game.physics.arcade.enable(item);
+        item.animations.add('hover', [0, 1, 2, 3], 8, true);
+        item.animations.play('hover');
+    } else {
+        this.itemSpawnClock.start();
+    }
+}
+
 Pumpkin.prototype.toggle = function() {
     this.sprite.animations.stop();
     this.isOn = !this.isOn;
     if (this.isOn) {
         this.sprite.animations.play('on');
+        this.itemSpawnClock = game.time.create(false);
+        this.spawnItem();
     } else {
         this.sprite.animations.play('off');
+        this.itemSpawnClock.destroy();
     }
 }
 

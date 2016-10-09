@@ -4,7 +4,7 @@ var player_mask;
 
 var map;
 var groundLayer, bottomLayer, midLayer, topLayer, aboveLayer, collisionLayer;
-var entitiesLayer, playerLayer, bulletsLayer;
+var entitiesLayer, playerLayer, bulletsLayer, itemsLayer;
 
 var player;
 var pumpkins = [];
@@ -36,6 +36,7 @@ function create() {
     midLayer = map.createLayer('middle');
 
     // create player & player-interactable objects between appropriate layers
+    itemsLayer = game.add.group();
     entitiesLayer = game.add.group();
     bulletsLayer = game.add.group();
     playerLayer = game.add.group();

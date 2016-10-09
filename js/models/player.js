@@ -215,6 +215,14 @@ Player.prototype.takeDamage = function(source) {
             this.sprite.body.velocity.set(150, 0);
         }
     }
+}
 
+Player.prototype.pickUpItem = function(itemKey) {
+    if (itemKey === 'candy') {
 
+    } else if (itemKey === 'candle') {
+
+    } else if (itemKey === 'loot') {
+
+    }
 }

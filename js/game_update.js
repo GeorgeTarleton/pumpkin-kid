@@ -8,6 +8,7 @@ function update() {
 
     game.physics.arcade.collide(player.sprite, collisionLayer);
     game.physics.arcade.collide(player.sprite, entitiesLayer, playerHit);
+    game.physics.arcade.overlap(player.sprite, itemsLayer, itemPickup);
     game.physics.arcade.collide(entitiesLayer, entitiesLayer);
     game.physics.arcade.collide(entitiesLayer, collisionLayer);
     game.physics.arcade.collide(bulletsLayer, collisionLayer, bulletHitObject, null, this);
@@ -88,4 +89,9 @@ function bulletHitEnemy(bullet, enemy) {
         }
     }
     enemy.shot = false;
+}
+
+function itemPickup(p, item) {
+    player.pickUpItem(item.key);
+    item.kill();
 }
