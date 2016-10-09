@@ -32,7 +32,7 @@ Pumpkin.prototype.spawnItem = function() {
             itemKey = 'loot';
         }
 
-        // spawn within radius 16 to 50 from the center of pumpkin
+        // spawn within 16 to 50 px from the center of pumpkin
         var item = itemsLayer.create(
             this.sprite.centerX + game.rnd.integerInRange(16, 50) * (game.rnd.integerInRange(0, 1) ? -1 : 1),
             this.sprite.centerY + game.rnd.integerInRange(16, 50) * (game.rnd.integerInRange(0, 1) ? -1 : 1),
@@ -41,6 +41,10 @@ Pumpkin.prototype.spawnItem = function() {
         game.physics.arcade.enable(item);
         item.animations.add('hover', [0, 1, 2, 3], 8, true);
         item.animations.play('hover');
+
+        var t = game.time.create(true);
+        t.add(20000, function() { if (item.alive) item.kill(); }, this);    // kill item after 20s if not picked up
+        t.start();
     } else {
         this.itemSpawnClock.start();
     }

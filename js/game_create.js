@@ -134,3 +134,8 @@ function spawnSkeletons() {
     }
     // enemies['skeletons'].push(new Skeleton(280, 320));
 }
+
+function gameOver() {
+    player.sprite.kill();
+}
+

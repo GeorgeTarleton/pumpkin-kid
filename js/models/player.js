@@ -61,8 +61,9 @@ var Player = function(spriteX, spriteY) {
 
     this.visionRadius = 40;
 
-    this.hp = 100;
-    this.alive = true;
+    this.hp = 200;
+    this.clipSize = 10;
+    this.ammo = 5 * this.clipSize;
 }
 
 Player.prototype.update = function(cursors) {
@@ -181,7 +182,13 @@ Player.prototype.afterAttack = function() {
     }
 }
 
-Player.prototype.takeDamage = function(source) {
+Player.prototype.takeDamage = function(sourceEnemy) {
+    this.hp -= sourceEnemy.damage;
+    if (this.hp <= 0) {
+        gameOver();
+        return;
+    }
+
     this.animationState = ATTACKED;
 
     var currentAnim = this.sprite.animations.currentAnim.name;
@@ -199,7 +206,7 @@ Player.prototype.takeDamage = function(source) {
     t.add(100, function() { if (this.animationState === ATTACKED) this.animationState = DEFAULT }, this);
     t.start();
 
-    var duration = source.knockbackDuration;
+    var duration = sourceEnemy.knockbackDuration;
     if (duration && this.movementState !== KNOCKED_BACK) {
         this.movementState = KNOCKED_BACK;
 
@@ -207,13 +214,13 @@ Player.prototype.takeDamage = function(source) {
         knockbackTimer.add(duration, function() { this.movementState = FREE; }, this);
         knockbackTimer.start();
 
-        if (source.nextDirection == 'down') {
+        if (sourceEnemy.nextDirection == 'down') {
             this.sprite.body.velocity.set(0, 150);
-        } else if (source.nextDirection == 'up') {
+        } else if (sourceEnemy.nextDirection == 'up') {
             this.sprite.body.velocity.set(0, -150);
-        } else if (source.nextDirection == 'left') {
+        } else if (sourceEnemy.nextDirection == 'left') {
             this.sprite.body.velocity.set(-150, 0);
-        } else if (source.nextDirection == 'right') {
+        } else if (sourceEnemy.nextDirection == 'right') {
             this.sprite.body.velocity.set(150, 0);
         }
     }
@@ -221,10 +228,10 @@ Player.prototype.takeDamage = function(source) {
 
 Player.prototype.pickUpItem = function(itemKey) {
     if (itemKey === 'candy') {
-
+        this.hp = Math.max(this.hp + 40, 200);
     } else if (itemKey === 'candle') {
-
+        this.visionRadius = Math.max(this.visionRadius + 10, 70);
     } else if (itemKey === 'loot') {
-
+        this.ammo = Math.max(this.ammo + this.clipSize, this.clipSize * 5);
     }
 }
