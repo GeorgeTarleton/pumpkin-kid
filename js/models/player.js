@@ -36,11 +36,15 @@ var Player = function(spriteX, spriteY) {
     // player weapons
     this.weapons = [
         new Shovel(-16, -16),
-        new Gun(0, 0)
+        new Gun(-16, -8)
     ];
+    for (var i in this.weapons) {
+        this.sprite.addChild(this.weapons[i].sprite);
+    }
     this.weaponId = 0;
     this.weapon = this.weapons[this.weaponId];
-    this.sprite.addChild(this.weapon.sprite);
+    this.weapon.sprite.visible = true;
+
 
     this.meleeHitbox = playerLayer.create(0, 0, 'melee_hitbox');
     this.sprite.addChild(this.meleeHitbox);

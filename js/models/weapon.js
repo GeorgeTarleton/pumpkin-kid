@@ -1,5 +1,6 @@
 var Weapon = function(spriteX, spriteY, spritesheet) {
     this.sprite = playerLayer.create(spriteX, spriteY, spritesheet);
+    this.sprite.visible = false;
 
     this.canUse = true;
 }
@@ -60,23 +61,35 @@ Shovel.prototype.use = function(callback) {
 var Gun = function(spriteX, spriteY) {
     Weapon.call(this, spriteX, spriteY, 'gun');
 
+    // this.sprite.animations.add('idle_down', [0, 1], 4, true);
+    // this.sprite.animations.add('idle_left', [4, 5], 4, true);
+    // this.sprite.animations.add('idle_up', [8, 9], 4, true);
+    // this.sprite.animations.add('idle_right', [12, 13], 4, true);
+    // this.sprite.animations.add('walk_down', [0, 1], 4, true);
+    // this.sprite.animations.add('walk_left', [4, 5], 4, true);
+    // this.sprite.animations.add('walk_up', [8, 9], 4, true);
+    // this.sprite.animations.add('walk_right', [12, 13], 4, true);
+    // this.sprite.animations.add('use_down', [16, 17, 18, 19], 8, false);
+    // this.sprite.animations.add('use_left', [20, 21, 22, 23], 8, false);
+    // this.sprite.animations.add('use_up', [24, 25, 26, 27], 8, false);
+    // this.sprite.animations.add('use_right', [28, 29, 30, 31], 8, false);
     this.sprite.animations.add('idle_down', [0, 1], 4, true);
-    this.sprite.animations.add('idle_left', [4, 5], 4, true);
-    this.sprite.animations.add('idle_up', [8, 9], 4, true);
-    this.sprite.animations.add('idle_right', [12, 13], 4, true);
+    this.sprite.animations.add('idle_left', [2, 3], 4, true);
+    this.sprite.animations.add('idle_up', [4, 5], 4, true);
+    this.sprite.animations.add('idle_right', [6, 7], 4, true);
     this.sprite.animations.add('walk_down', [0, 1], 4, true);
-    this.sprite.animations.add('walk_left', [4, 5], 4, true);
-    this.sprite.animations.add('walk_up', [8, 9], 4, true);
-    this.sprite.animations.add('walk_right', [12, 13], 4, true);
-    this.sprite.animations.add('use_down', [16, 17, 18, 19], 8, false);
-    this.sprite.animations.add('use_left', [20, 21, 22, 23], 8, false);
-    this.sprite.animations.add('use_up', [24, 25, 26, 27], 8, false);
-    this.sprite.animations.add('use_right', [28, 29, 30, 31], 8, false);
+    this.sprite.animations.add('walk_left', [2, 3], 4, true);
+    this.sprite.animations.add('walk_up', [4, 5], 4, true);
+    this.sprite.animations.add('walk_right', [6, 7], 4, true);
+    this.sprite.animations.add('use_down', [0, 1], 4, false);
+    this.sprite.animations.add('use_left', [2, 3], 4, false);
+    this.sprite.animations.add('use_up', [4, 5], 4, false);
+    this.sprite.animations.add('use_right', [6, 7], 4, false);
     this.sprite.animations.play('idle_down');
 
-    this.attackAnimationTime = 300;
-    this.attackTime = 300;
-    this.damage = 20;
+    this.attackAnimationTime = 200;
+    this.attackTime = 200;
+    this.damage = 30;
 }
 
 Gun.prototype = Object.create(Weapon.prototype);
@@ -84,16 +97,23 @@ Gun.prototype = Object.create(Weapon.prototype);
 Gun.prototype.use = function(callback) {
     this.useInternal(callback);
 
-    var bullet = bulletsLayer.create(player.sprite.centerX, player.sprite.centerY, 'bullet');
+    var bullet = bulletsLayer.create(0, 0, 'bullet');
     bullet.anchor.set(0.5, 0.5);
     game.physics.arcade.enable(bullet);
+
+    var playerx = player.sprite.centerX;
+    var playery = player.sprite.centerY;
     if (player.lastDirection == 'down') {
+        bullet.position.set(playerx - 4, playery + 4);
         bullet.body.velocity.set(0, 200);
     } else if (player.lastDirection == 'up') {
+        bullet.position.set(playerx + 4, playery + 4);
         bullet.body.velocity.set(0, -200);
     } else if (player.lastDirection == 'left') {
+        bullet.position.set(playerx - 4, playery + 4);
         bullet.body.velocity.set(-200, 0);
     } else if (player.lastDirection == 'right') {
+        bullet.position.set(playerx + 4, playery + 4);
         bullet.body.velocity.set(200, 0);
     }
 }
