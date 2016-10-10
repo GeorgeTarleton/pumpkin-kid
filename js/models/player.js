@@ -165,10 +165,12 @@ Player.prototype.updateVisionMask = function() {
 Player.prototype.shrinkVision = function() {
     this.visionShrinkTimer.add(20000, this.shrinkVision, this);
     if (this.visionShrinkTimer.running) {
-        this.visionRadius = Math.max(this.visionRadius - 10, 20);
         this.candles = Math.max(--this.candles, 0);
-        candleText.text = this.candles.toString();
+        if (this.candles <= 5) {
+            this.visionRadius = Math.max(this.visionRadius - 10, 20);
+        }
 
+        candleText.text = this.candles.toString();
         this.visionMask = this.visionMasks[this.visionRadius];
     } else {
         this.visionShrinkTimer.start();
@@ -176,9 +178,11 @@ Player.prototype.shrinkVision = function() {
 }
 
 Player.prototype.feedCandle = function() {
-    this.candles--;
+    this.candles = Math.max(--this.candles, 0);
+    if (this.candles <= 5) {
+        this.visionRadius = Math.max(this.visionRadius - 10, 20);
+    }
     candleText.text = this.candles.toString();
-    this.visionRadius = Math.max(this.visionRadius - 10, 20);
     this.visionMask = this.visionMasks[this.visionRadius];
 }
 
