@@ -136,6 +136,10 @@ Enemy.prototype.spawnCandle = function() {
     game.physics.arcade.enable(item);
     item.animations.add('hover', [0, 1, 2, 3], 4, true);
     item.animations.play('hover');
+
+    var t = game.time.create(true);
+    t.add(20000, function() { if (item.alive) item.kill(); }, this);    // kill item after 20s if not picked up
+    t.start();
 }
 
 
