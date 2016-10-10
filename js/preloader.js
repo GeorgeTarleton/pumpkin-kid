@@ -6,14 +6,13 @@ SpookyGame.Preloader.prototype = {
     preload: function() {
         console.log("Preloading");
 
-        game.stage.setBackgroundColor(0xa5572f);
+        game.stage.setBackgroundColor(0x281a29);
 
         // import assets
 
         // menu screen
         game.load.image('logo', 'assets/ui/logo.gif');
-        game.load.image('start_text', 'assets/ui/start.gif');
-        game.load.image('start_text_flash', 'assets/ui/start_flash.gif');
+        game.load.spritesheet('start_text', 'assets/ui/start.gif', 160, 9);
 
         // map elements
         game.load.tilemap('map', 'assets/maps/2.json', null, Phaser.Tilemap.TILED_JSON);

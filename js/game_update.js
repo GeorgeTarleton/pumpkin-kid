@@ -1,6 +1,8 @@
 var visionClock = 0;
 
 function update() {
+    if (!player) return;
+
     // manually create clock to animate vision "flickering" for lighted objects
     // 1 cycle = 40 frames
     if (++visionClock == 40) visionClock = 0;
