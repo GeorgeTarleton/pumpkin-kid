@@ -1,6 +1,8 @@
 var bitmap;
 var shadow;
 
+var font;
+
 var map;
 var groundLayer, bottomLayer, midLayer, topLayer, aboveLayer, collisionLayer;
 var entitiesLayer, playerLayer, bulletsLayer, itemsLayer, pumpkinsLayer;
@@ -45,6 +47,9 @@ function create() {
     music = game.add.audio('bg');
     music.loop = true;
     music.play();
+
+    // set up font
+    font = game.add.retroFont('numpbers', 5, 6, "0123456789", 10, 1, 1);
 
     // set up tilemap
     map = game.add.tilemap('map');
