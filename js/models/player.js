@@ -57,11 +57,24 @@ var Player = function(spriteX, spriteY) {
     this.movementState = FREE;
     this.animationState = DEFAULT;
 
-    this.visionMask = game.make.sprite(this.sprite.centerX, this.sprite.centerY, 'mask_40');
-    this.visionMask.frame = 0;
-    this.visionMask.anchor.set(0.5, 0.5);
+    this.visionMasks = {
+        20: game.make.sprite(this.sprite.centerX, this.sprite.centerY, 'mask_20'),
+        30: game.make.sprite(this.sprite.centerX, this.sprite.centerY, 'mask_30'),
+        40: game.make.sprite(this.sprite.centerX, this.sprite.centerY, 'mask_40'),
+        50: game.make.sprite(this.sprite.centerX, this.sprite.centerY, 'mask_50'),
+        60: game.make.sprite(this.sprite.centerX, this.sprite.centerY, 'mask_60'),
+        70: game.make.sprite(this.sprite.centerX, this.sprite.centerY, 'mask_70')
+    };
+
+    for (var i = 20; i <= 70; i += 10) {
+        this.visionMasks[i].frame = 0;
+        this.visionMasks[i].anchor.set(0.5, 0.5);
+    }
 
     this.visionRadius = 40;
+    this.visionMask = this.visionMasks[this.visionRadius];
+    this.visionShrinkTimer = game.time.create(false);
+    this.shrinkVision();
 
     this.alive = true;
     this.hp = 200;
@@ -145,6 +158,18 @@ Player.prototype.updateVisionMask = function() {
     bitmap.draw(this.visionMask);
 }
 
+Player.prototype.shrinkVision = function() {
+    this.visionShrinkTimer.add(15000, this.shrinkVision, this);
+    if (this.visionShrinkTimer.running) {
+        this.visionRadius -= 10;
+        if (this.visionRadius < 20) this.visionRadius = 20;
+
+        this.visionMask = this.visionMasks[this.visionRadius];
+    } else {
+        this.visionShrinkTimer.start();
+    }
+}
+
 Player.prototype.switchWeapon = function() {
     if (this.movementState === FREE) {
         this.weapon.sprite.visible = false;     // hide previous weapon
@@ -199,6 +224,7 @@ Player.prototype.takeDamage = function(sourceEnemy) {
         this.animationState = DEATH;
         this.weapon.sprite.visible = false;
         this.alive = false;
+        this.sprite.body.velocity.set(0, 0);
         gameOver();
         return;
     }
@@ -245,7 +271,10 @@ Player.prototype.pickUpItem = function(itemKey) {
         this.hp = Math.min(this.hp + 40, 200);
         this.updateHPBar();
     } else if (itemKey === 'candle') {
-        this.visionRadius = Math.min(this.visionRadius + 10, 70);
+        this.visionRadius = Math.min(this.visionRadius + 20, 70);
+        this.visionMask = this.visionMasks[this.visionRadius];
+        this.visionShrinkTimer.stop(true);
+        this.shrinkVision();
     } else if (itemKey === 'loot') {
         this.ammo = Math.min(this.ammo + this.clipSize, this.clipSize * 5);
         this.updateAmmoBar();
