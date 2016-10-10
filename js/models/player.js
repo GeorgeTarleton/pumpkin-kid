@@ -167,6 +167,7 @@ Player.prototype.shrinkVision = function() {
     if (this.visionShrinkTimer.running) {
         this.visionRadius = Math.max(this.visionRadius - 10, 20);
         this.candles = Math.max(--this.candles, 0);
+        candleText.text = this.candles.toString();
 
         this.visionMask = this.visionMasks[this.visionRadius];
     } else {
@@ -176,6 +177,7 @@ Player.prototype.shrinkVision = function() {
 
 Player.prototype.feedCandle = function() {
     this.candles--;
+    candleText.text = this.candles.toString();
     this.visionRadius = Math.max(this.visionRadius - 10, 20);
     this.visionMask = this.visionMasks[this.visionRadius];
 }
@@ -282,6 +284,7 @@ Player.prototype.pickUpItem = function(itemKey) {
         this.updateHPBar();
     } else if (itemKey === 'candle') {
         this.candles++;
+        candleText.text = this.candles.toString();
         this.visionRadius = Math.min(this.visionRadius + 10, 70);
         this.visionMask = this.visionMasks[this.visionRadius];
         this.visionShrinkTimer.stop(true);

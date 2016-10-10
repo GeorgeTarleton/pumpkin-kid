@@ -28,6 +28,8 @@ SpookyGame.Preloader.prototype = {
         game.load.image('loadout', 'assets/ui/loadout.gif');
         game.load.image('shovel_icon', 'assets/ui/shovel.gif');
         game.load.image('gun_icon', 'assets/ui/gun.gif');
+        game.load.image('candle_icon', 'assets/ui/candle.gif');
+        game.load.image('x', 'assets/ui/x.gif');
 
         // vision assets
         game.load.image('shadow', 'assets/shadow.gif');

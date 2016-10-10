@@ -300,6 +300,7 @@ Skeleton.prototype.die = function() {
     this.sprite.body.enable = false;
 
     player.score += 10;
+    scoreText.setText(player.score.toString());
 
     this.spawnCandle();
 }

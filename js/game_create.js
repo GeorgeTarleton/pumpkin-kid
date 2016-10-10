@@ -1,8 +1,6 @@
 var bitmap;
 var shadow;
 
-var font;
-
 var map;
 var groundLayer, bottomLayer, midLayer, topLayer, aboveLayer, collisionLayer;
 var entitiesLayer, playerLayer, bulletsLayer, itemsLayer, pumpkinsLayer;
@@ -22,13 +20,15 @@ var spawnPoints = [
     {x: 48, y: 49}, {x: 51, y: 49}, {x: 54, y: 49}, {x: 48, y: 55}, {x: 51, y: 55}, {x: 54, y: 55}
 ];
 var spawnTimes = [
-    8000, 6000, 4000, 3000
+    1000, 8000, 6000, 4000
 ];
 var stage = 0;
 
 var hpOverlay;
 var ammoBar;
 var loadout;
+var scoreText;
+var candleText;
 
 var cursors;
 var keyPumpkin, keyAttack, keyWeapon, keyCandle;
@@ -47,9 +47,6 @@ function create() {
     music = game.add.audio('bg');
     music.loop = true;
     music.play();
-
-    // set up font
-    font = game.add.retroFont('numpbers', 5, 6, "0123456789", 10, 1, 1);
 
     // set up tilemap
     map = game.add.tilemap('map');
@@ -129,6 +126,11 @@ function setupUI() {
     ammoBar.anchor.set(1, 0);
     ammoBar.frame = 5;
 
+    scoreText = game.add.retroFont('numpbers', 5, 6, "0123456789", 10);
+    var score = uiLayer.create(game.width / 2, 10, scoreText);
+    score.anchor.set(0.5, 0);
+    scoreText.text = "0";
+
     loadout = uiLayer.create(8, game.height - 8, 'loadout');
     loadout.anchor.set(0, 1);
     player.weapons.forEach(function(w) {
@@ -138,6 +140,16 @@ function setupUI() {
         loadout.addChild(w.loadout);
     });
     player.weapon.loadout.visible = true;
+
+    var candle = uiLayer.create(game.width - 10, game.height - 10, 'candle_icon');
+    candle.anchor.set(1, 1);
+    var x = uiLayer.create(game.width - 20, game.height - 10, 'x');
+    x.anchor.set(1, 1);
+
+    candleText = game.add.retroFont('numpbers', 5, 6, "0123456789", 10);
+    var candleCount = uiLayer.create(game.width - 36, game.height - 15, candleText);
+    candleCount.anchor.set(1, 1);
+    candleText.text = "2";
 }
 
 function attack() {
