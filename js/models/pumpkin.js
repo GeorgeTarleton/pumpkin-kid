@@ -28,7 +28,7 @@ var Pumpkin = function(spriteX, spriteY) {
 }
 
 Pumpkin.prototype.diminishHp = function() {
-    this.hpTimer.add(10000, this.diminishHp, this);
+    this.hpTimer.add(20000, this.diminishHp, this);
     if (this.hpTimer.running) {
         this.hp -= 100;
         this.hpBarOverlay.scale.set(-3 * Math.floor((500 - this.hp)/100), 1);
