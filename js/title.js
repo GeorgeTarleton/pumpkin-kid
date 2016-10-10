@@ -8,11 +8,6 @@ SpookyGame.Title.prototype = {
     create: function() {
         console.log("Entered title");
 
-        // play music
-        music = game.add.audio('bg');
-        music.loop = true;
-        music.play();
-
         this.overlay = game.add.group();
         this.overlay.fixedToCamera = true;
 
@@ -20,12 +15,12 @@ SpookyGame.Title.prototype = {
 
         var playerSprite = this.overlay.create(game.width / 2, 82, 'player');
         playerSprite.anchor.set(0.5, 0);
-        playerSprite.animations.add('def', [0, 1, 2, 3], 8, true);
+        playerSprite.animations.add('def', [0, 1, 2, 3], 4, true);
         playerSprite.animations.play('def');
 
-        this.startText = this.overlay.create(0, 120, 'start_text');
-        this.startText.animations.add('hover', [0, 1], 2, true);
-        this.startText.animations.add('flash', [0, 2], 8, true);
+        this.startText = this.overlay.create(0, 115, 'start_text');
+        this.startText.animations.add('hover', [0, 1, 2, 1], 3, true);
+        this.startText.animations.add('flash', [0, 3], 16, true);
         this.startText.animations.play('hover');
 
 
@@ -36,7 +31,7 @@ SpookyGame.Title.prototype = {
     start: function() {
         this.startText.animations.play('flash');
         var t = game.time.create(true);
-        t.add(875, function() {
+        t.add(800, function() {
             this.overlay.removeAll(true);
             game.state.start("Game");
         }, this);

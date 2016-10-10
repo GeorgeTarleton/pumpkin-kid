@@ -12,7 +12,7 @@ SpookyGame.Preloader.prototype = {
 
         // menu screen
         game.load.image('logo', 'assets/ui/logo.gif');
-        game.load.spritesheet('start_text', 'assets/ui/start.gif', 160, 9);
+        game.load.spritesheet('start_text', 'assets/ui/start.gif', 160, 16);
 
         // map elements
         game.load.tilemap('map', 'assets/maps/2.json', null, Phaser.Tilemap.TILED_JSON);

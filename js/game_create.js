@@ -43,6 +43,11 @@ function create() {
     // draw environment
     game.world.setBounds(0, 0, 640, 624);
 
+    // play music
+    music = game.add.audio('bg');
+    music.loop = true;
+    music.play();
+
     // set up font
     font = game.add.retroFont('numpbers', 5, 6, "0123456789", 10, 1, 1);
 
