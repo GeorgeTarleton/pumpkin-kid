@@ -167,7 +167,7 @@ function feedCandle() {
     if (player.candles > 0) {
         for (var i in pumpkins) {
             var p = pumpkins[i];
-            if (distBetweenCenters(player.sprite, p.sprite) < 20) {
+            if (distBetweenCenters(player.sprite, p.sprite) < 20 && p.hp < 500) {
                 p.heal();
                 player.feedCandle();
                 break;
