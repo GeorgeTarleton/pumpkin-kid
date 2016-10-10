@@ -31,6 +31,8 @@ var loadout;
 var cursors;
 var keyPumpkin, keyAttack, keyWeapon;
 
+var music;
+
 function create() {
     console.log("Game created");
 
@@ -38,6 +40,11 @@ function create() {
 
     // draw environment
     game.world.setBounds(0, 0, 640, 624);
+
+    // play music
+    music = game.add.audio('bg');
+    music.loop = true;
+    music.play();
 
     // set up tilemap
     map = game.add.tilemap('map');
