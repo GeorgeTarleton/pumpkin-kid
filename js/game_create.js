@@ -147,7 +147,8 @@ function setupUI() {
     x.anchor.set(1, 1);
 
     candleText = game.add.retroFont('numpbers', 5, 6, "0123456789", 10);
-    var candleCount = uiLayer.create(game.width - 36, game.height - 15, candleText);
+    candleText.align = candleText.ALIGN_RIGHT;
+    var candleCount = uiLayer.create(game.width - 34, game.height - 15, candleText);
     candleCount.anchor.set(1, 1);
     candleText.text = "2";
 }

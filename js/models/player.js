@@ -97,6 +97,8 @@ Player.prototype.update = function(cursors) {
         } else if (this.weapon.attackTimer && this.weapon.attackTimer.ms >= 200) {
             this.meleeHitbox.body.enable = true;
         }
+    } else {
+        this.meleeHitbox.body.enable = false;
     }
 
     var direction = 'stop';
@@ -165,29 +167,27 @@ Player.prototype.updateVisionMask = function() {
 Player.prototype.shrinkVision = function() {
     this.visionShrinkTimer.add(20000, this.shrinkVision, this);
     if (this.visionShrinkTimer.running) {
-        this.candles = Math.max(--this.candles, 0);
-        if (this.candles < 5) {
-            this.visionRadius = Math.max(this.visionRadius - 10, 20);
-        }
-
-        candleText.text = this.candles.toString();
-        this.visionMask = this.visionMasks[this.visionRadius];
+        this.decreaseVision();
     } else {
         this.visionShrinkTimer.start();
     }
 }
 
 Player.prototype.feedCandle = function() {
+    this.decreaseVision();
+}
+
+Player.prototype.decreaseVision = function() {
     this.candles = Math.max(--this.candles, 0);
     if (this.candles < 5) {
         this.visionRadius = Math.max(this.visionRadius - 10, 20);
     }
-    candleText.text = this.candles.toString();
+    this.updateCandleCount();
     this.visionMask = this.visionMasks[this.visionRadius];
 }
 
 Player.prototype.switchWeapon = function() {
-    if (this.movementState === FREE) {
+    if (this.animationState === DEFAULT) {
         this.weapon.sprite.visible = false;     // hide previous weapon
         this.weapon = this.weapons[(++this.weaponId % 2)];
         this.weapon.sprite.visible = true;      // show current weapon
@@ -231,17 +231,24 @@ Player.prototype.afterAttack = function() {
     }
 }
 
+Player.prototype.die = function() {
+    this.sprite.animations.play('death');
+    this.animationState = DEATH;
+    this.weapon.sprite.visible = false;
+    this.alive = false;
+    this.sprite.body.velocity.set(0, 0);
+    this.visionShrinkTimer.destroy();
+
+
+    gameOver();
+}
+
 Player.prototype.takeDamage = function(sourceEnemy) {
     this.hp -= sourceEnemy.damage;
     this.hp = Math.max(this.hp, 0);
     this.updateHPBar();
     if (this.hp == 0) {
-        this.sprite.animations.play('death');
-        this.animationState = DEATH;
-        this.weapon.sprite.visible = false;
-        this.alive = false;
-        this.sprite.body.velocity.set(0, 0);
-        gameOver();
+        this.die();
         return;
     }
 
@@ -288,7 +295,8 @@ Player.prototype.pickUpItem = function(itemKey) {
         this.updateHPBar();
     } else if (itemKey === 'candle') {
         this.candles++;
-        candleText.text = this.candles.toString();
+        this.updateCandleCount();
+
         this.visionRadius = Math.min(this.visionRadius + 10, 70);
         this.visionMask = this.visionMasks[this.visionRadius];
         this.visionShrinkTimer.stop(true);
@@ -305,4 +313,8 @@ Player.prototype.updateHPBar = function() {
 
 Player.prototype.updateAmmoBar = function() {
     ammoBar.frame = Math.floor((this.ammo - 1) / this.clipSize) + 1;
+}
+
+Player.prototype.updateCandleCount = function() {
+    candleText.text = this.candles.toString();
 }
