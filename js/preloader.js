@@ -63,7 +63,7 @@ SpookyGame.Preloader.prototype = {
 
     },
     create: function() {
-        game.state.start("Game");
+        game.state.start("Title");
     },
     update: function() {
 

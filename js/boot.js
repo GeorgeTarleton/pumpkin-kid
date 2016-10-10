@@ -5,6 +5,7 @@ window.onload = function() {
 
     game.state.add('Boot', SpookyGame.Boot);
     game.state.add('Preloader', SpookyGame.Preloader);
+    game.state.add('Title', SpookyGame.Title);
     game.state.add('Game', SpookyGame.Game);
 
     game.state.start('Boot');
