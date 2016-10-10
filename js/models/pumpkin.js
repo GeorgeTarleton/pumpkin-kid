@@ -59,7 +59,7 @@ Pumpkin.prototype.heal = function() {
 }
 
 Pumpkin.prototype.spawnItem = function() {
-    this.itemSpawnClock.add(game.rnd.integerInRange(7500, 12500), this.spawnItem, this);
+    this.itemSpawnClock.add(game.rnd.integerInRange(5000, 10000), this.spawnItem, this);
     if (this.itemSpawnClock.running) {
         var itemKey;
         var rand = game.rnd.integerInRange(1, 100);
