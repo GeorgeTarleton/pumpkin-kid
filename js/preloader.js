@@ -55,6 +55,9 @@ SpookyGame.Preloader.prototype = {
         game.load.image('melee_hitbox', 'assets/melee_hitbox.gif');
         game.load.image('bullet', 'assets/bullet.gif');
 
+        // number font
+        game.load.image('numpbers', 'assets/ui/numpbers.gif');
+
         // sounds
         game.load.audio('bg', 'assets/sound/graveyard.wav');
 
