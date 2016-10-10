@@ -233,12 +233,22 @@ function gameOver() {
     music.stop();
 
     // restart game
-    keyAttack.onDown.addOnce(function() {
-        game.world.removeAll(true);
-        enemies = { 'ghosts': [], 'skeletons': [] };
-        pumpkins = [];
-        stage = 0;
-        game.state.start("Game");
+    keyAttack.onDown.addOnce(restartGame, this);
+    keyAttack.onDown.active = false;
+    var t = game.time.create(true);
+    t.add(2000, function() {
+        keyAttack.onDown.active = true;
+        var s = uiLayer.create(game.width / 2, 40, 'game_over');
+        s.anchor.set(0.5, 0);
     }, this);
+    t.start();
+}
+
+function restartGame() {
+    game.world.removeAll(true);
+    enemies = { 'ghosts': [], 'skeletons': [] };
+    pumpkins = [];
+    stage = 0;
+    game.state.start("Game");
 }
 
