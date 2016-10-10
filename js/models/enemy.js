@@ -194,6 +194,8 @@ Ghost.prototype.die = function() {
     this.isDying = true;
     this.sprite.body.velocity.set(0, 0);
     this.sprite.body.enable = false;
+
+    player.score += 10;
 }
 
 
@@ -280,4 +282,6 @@ Skeleton.prototype.die = function() {
     this.isDying = true;
     this.sprite.body.velocity.set(0, 0);
     this.sprite.body.enable = false;
+
+    player.score += 10;
 }

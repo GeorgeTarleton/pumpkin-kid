@@ -80,6 +80,8 @@ var Player = function(spriteX, spriteY) {
     this.hp = 200;
     this.clipSize = 10;
     this.ammo = 5 * this.clipSize;
+
+    this.score = 0;
 }
 
 Player.prototype.update = function(cursors) {

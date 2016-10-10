@@ -35,6 +35,15 @@ function update() {
             });
         }
     }
+
+
+    if (player.score > 2000) {
+        stage = 3;
+    } else if (player.score > 500) {
+        stage = 2;
+    } else if (player.score > 200) {
+        stage = 1;
+    }
 }
 
 function playerHit(p, enemy) {
