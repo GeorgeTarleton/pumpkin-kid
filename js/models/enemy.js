@@ -154,7 +154,7 @@ var Ghost = function(spriteX, spriteY) {
 
 Ghost.prototype = Object.create(Enemy.prototype);
 
-Ghost.prototype.damage = 30;
+Ghost.prototype.damage = 40;
 Ghost.prototype.knockbackDuration = false;
 Ghost.prototype.attackSpeed = 1000;
 
@@ -227,7 +227,7 @@ var Skeleton = function(spriteX, spriteY) {
 
 Skeleton.prototype = Object.create(Enemy.prototype);
 
-Skeleton.prototype.damage = 50;
+Skeleton.prototype.damage = 60;
 Skeleton.prototype.knockbackDuration = 60;
 Skeleton.prototype.attackSpeed = 1000;
 

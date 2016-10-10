@@ -68,7 +68,7 @@ var Player = function(spriteX, spriteY) {
 
 Player.prototype.update = function(cursors) {
     // debug
-    console.log(this.animationState + ' ' + this.movementState);
+    // console.log(this.animationState + ' ' + this.movementState);
 
     // only enable melee hitbox for a short duration within the attack animation
     if (this.weapon.sprite.key === 'shovel') {
@@ -151,9 +151,9 @@ Player.prototype.switchWeapon = function() {
 
 Player.prototype.attack = function() {
     if (this.movementState === FREE && this.weapon.canUse) {
-        this.weapon.use(this.afterAttack);
-
         if (this.weapon.sprite.key === 'shovel') {
+            this.weapon.use(this.afterAttack);
+
             this.animationState = ATTACKING;
             this.movementState = ROOTED;
             this.sprite.body.velocity.set(0, 0);
@@ -168,7 +168,11 @@ Player.prototype.attack = function() {
                 this.meleeHitbox.body.setSize(24, 16, 0, -8);
             }
         } else {
-
+            if (this.ammo > 0) {
+                this.weapon.use(this.afterAttack);
+                this.ammo--;
+                this.updateAmmoBar();
+            }
         }
     }
 }
@@ -184,6 +188,7 @@ Player.prototype.afterAttack = function() {
 
 Player.prototype.takeDamage = function(sourceEnemy) {
     this.hp -= sourceEnemy.damage;
+    this.updateHPBar();
     if (this.hp <= 0) {
         gameOver();
         return;
@@ -228,10 +233,20 @@ Player.prototype.takeDamage = function(sourceEnemy) {
 
 Player.prototype.pickUpItem = function(itemKey) {
     if (itemKey === 'candy') {
-        this.hp = Math.max(this.hp + 40, 200);
+        this.hp = Math.min(this.hp + 40, 200);
+        this.updateHPBar();
     } else if (itemKey === 'candle') {
-        this.visionRadius = Math.max(this.visionRadius + 10, 70);
+        this.visionRadius = Math.min(this.visionRadius + 10, 70);
     } else if (itemKey === 'loot') {
-        this.ammo = Math.max(this.ammo + this.clipSize, this.clipSize * 5);
+        this.ammo = Math.min(this.ammo + this.clipSize, this.clipSize * 5);
+        this.updateAmmoBar();
     }
+}
+
+Player.prototype.updateHPBar = function() {
+    hpOverlay.scale.set(-2 * Math.floor((200 - this.hp) / 20), 1);
+}
+
+Player.prototype.updateAmmoBar = function() {
+    ammoBar.frame = Math.floor((this.ammo - 1) / this.clipSize) + 1;
 }

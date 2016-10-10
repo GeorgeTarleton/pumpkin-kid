@@ -19,6 +19,14 @@ SpookyGame.Preloader.prototype = {
         game.load.tilemap('map', 'assets/maps/2.json', null, Phaser.Tilemap.TILED_JSON);
         game.load.image('map_tiles', 'assets/environment.gif');
 
+        // UI elements
+        game.load.image('heart_icon', 'assets/ui/heart.gif');
+        game.load.spritesheet('ammo_icon', 'assets/ui/ammo.gif', 35, 12);
+        game.load.image('player_hp', 'assets/ui/hp_player.gif');
+        game.load.image('pumpkin_hp', 'assets/ui/hp_pumpkin.gif');
+        game.load.image('player_hp_overlay', 'assets/ui/hp_player_overlay.gif');
+        game.load.image('pumpkin_hp_overlay', 'assets/ui/hp_pumpkin_overlay.gif');
+
         // vision assets
         game.load.image('shadow', 'assets/shadow.gif');
         game.load.spritesheet('mask_20', 'assets/mask_20.gif', 40, 40);

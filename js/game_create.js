@@ -1,10 +1,10 @@
 var bitmap;
 var shadow;
-var player_mask;
 
 var map;
 var groundLayer, bottomLayer, midLayer, topLayer, aboveLayer, collisionLayer;
 var entitiesLayer, playerLayer, bulletsLayer, itemsLayer;
+var uiLayer;
 
 var player;
 var pumpkins = [];
@@ -13,6 +13,9 @@ var enemies = {
     'skeletons': []
 };
 var spawnTimers = {}
+
+var hpOverlay;
+var ammoBar;
 
 var cursors;
 var keyPumpkin, keyAttack, keyWeapon;
@@ -68,6 +71,11 @@ function create() {
     bitmap = game.make.bitmapData(game.world.width, game.world.height);
     game.add.sprite(0, 0, bitmap);
 
+    // draw UI
+    uiLayer = game.add.group();
+    uiLayer.fixedToCamera = true;
+    setupUI();
+
 
     cursors = game.input.keyboard.createCursorKeys();
 
@@ -81,6 +89,18 @@ function create() {
     keyWeapon.onDown.add(switchWeapon, this);
 
     game.camera.follow(player.sprite);
+}
+
+function setupUI() {
+    uiLayer.create(5, 5, 'heart_icon');
+    var hpBar = uiLayer.create(20, 9, 'player_hp');
+    hpOverlay = uiLayer.create(23, 2, 'player_hp_overlay');
+    hpBar.addChild(hpOverlay);
+    hpOverlay.scale.set(0, 1);
+
+    ammoBar = uiLayer.create(game.width - 6, 7, 'ammo_icon');
+    ammoBar.anchor.set(1, 0);
+    ammoBar.frame = 5;
 }
 
 function attack() {
@@ -122,7 +142,6 @@ function spawnGhosts() {
     } else {
         spawnTimers.ghosts.start();
     }
-    // enemies['ghosts'].push(new Ghost(320, 320));
 }
 
 function spawnSkeletons() {
@@ -132,7 +151,6 @@ function spawnSkeletons() {
     } else {
         spawnTimers.skeletons.start();
     }
-    // enemies['skeletons'].push(new Skeleton(280, 320));
 }
 
 function gameOver() {
