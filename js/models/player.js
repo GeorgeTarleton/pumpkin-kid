@@ -159,7 +159,7 @@ Player.prototype.updateVisionMask = function() {
 }
 
 Player.prototype.shrinkVision = function() {
-    this.visionShrinkTimer.add(15000, this.shrinkVision, this);
+    this.visionShrinkTimer.add(20000, this.shrinkVision, this);
     if (this.visionShrinkTimer.running) {
         this.visionRadius -= 10;
         if (this.visionRadius < 20) this.visionRadius = 20;
@@ -271,7 +271,7 @@ Player.prototype.pickUpItem = function(itemKey) {
         this.hp = Math.min(this.hp + 40, 200);
         this.updateHPBar();
     } else if (itemKey === 'candle') {
-        this.visionRadius = Math.min(this.visionRadius + 20, 70);
+        this.visionRadius = Math.min(this.visionRadius + 10, 70);
         this.visionMask = this.visionMasks[this.visionRadius];
         this.visionShrinkTimer.stop(true);
         this.shrinkVision();

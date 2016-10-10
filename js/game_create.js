@@ -13,6 +13,16 @@ var enemies = {
     'skeletons': []
 };
 var spawnTimers = {}
+var spawnPoints = [
+    {x: 14, y: 13}, {x: 19, y: 13}, {x: 24, y: 13}, {x: 14, y: 17}, {x: 19, y: 17},
+    {x: 57, y: 15}, {x: 62, y: 15}, {x: 57, y: 19}, {x: 62, y: 19}, {x: 62, y: 23},
+    {x: 24, y: 49}, {x: 27, y: 49}, {x: 30, y: 49}, {x: 24, y: 55}, {x: 27, y: 55}, {x: 30, y: 55},
+    {x: 48, y: 49}, {x: 51, y: 49}, {x: 54, y: 49}, {x: 48, y: 55}, {x: 51, y: 55}, {x: 54, y: 55}
+];
+var spawnTimes = [
+    10000, 7500, 5000, 3000
+];
+var stage = 0;
 
 var hpOverlay;
 var ammoBar;
@@ -53,7 +63,7 @@ function create() {
     groundLayer.resizeWorld();
 
 
-    player = new Player(game.world.centerX, game.world.centerY);
+    player = new Player(320, 312);
 
     spawnTimers.ghosts = game.time.create(false);
     spawnTimers.skeletons = game.time.create(false);
@@ -152,18 +162,24 @@ function placePumpkins() {
 }
 
 function spawnGhosts() {
-    spawnTimers.ghosts.add(5000, spawnGhosts, this);
+    spawnTimers.ghosts.add(
+        game.rnd.integerInRange(spawnTimes[stage] - 2000, spawnTimes[stage] + 2000),
+        spawnGhosts, this);
+    var id = game.rnd.integerInRange(0, spawnPoints.length - 1);
     if (spawnTimers.ghosts.running) {
-        enemies['ghosts'].push(new Ghost(game.rnd.integerInRange(200, 400), 180));
+        enemies['ghosts'].push(new Ghost(spawnPoints[id].x * 8, spawnPoints[id].y * 8));
     } else {
         spawnTimers.ghosts.start();
     }
 }
 
 function spawnSkeletons() {
-    spawnTimers.skeletons.add(5000, spawnSkeletons, this);
+    spawnTimers.skeletons.add(
+        game.rnd.integerInRange(spawnTimes[stage] - 2000, spawnTimes[stage] + 2000),
+        spawnSkeletons, this);
+    var id = game.rnd.integerInRange(0, spawnPoints.length - 1);
     if (spawnTimers.skeletons.running) {
-        enemies['skeletons'].push(new Skeleton(game.rnd.integerInRange(200, 400), 180));
+        enemies['skeletons'].push(new Skeleton(spawnPoints[id].x * 8, spawnPoints[id].y * 8));
     } else {
         spawnTimers.skeletons.start();
     }
@@ -172,5 +188,8 @@ function spawnSkeletons() {
 function gameOver() {
     spawnTimers.ghosts.destroy();
     spawnTimers.skeletons.destroy();
+    pumpkins.forEach(function(p) {
+        if (p.itemSpawnClock) p.itemSpawnClock.destroy();
+    });
 }
 
