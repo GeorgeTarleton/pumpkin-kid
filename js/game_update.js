@@ -7,12 +7,15 @@ function update() {
 
 
     game.physics.arcade.collide(player.sprite, collisionLayer);
+    game.physics.arcade.collide(player.sprite, pumpkinsLayer);
     game.physics.arcade.collide(player.sprite, entitiesLayer, playerHit);
     game.physics.arcade.overlap(player.sprite, itemsLayer, itemPickup);
     game.physics.arcade.collide(entitiesLayer, entitiesLayer);
+    game.physics.arcade.collide(entitiesLayer, pumpkinsLayer, damagePumpkin);
     game.physics.arcade.collide(entitiesLayer, collisionLayer);
     game.physics.arcade.collide(bulletsLayer, collisionLayer, bulletHitObject, null, this);
     game.physics.arcade.collide(bulletsLayer, entitiesLayer, bulletHitEnemy, null, this);
+    game.physics.arcade.collide(bulletsLayer, pumpkinsLayer, bulletHitObject, null, this);
     game.physics.arcade.collide(player.sprite, pumpkins.map(function(p) { return p.sprite }));
 
     game.physics.arcade.overlap(player.meleeHitbox, entitiesLayer, meleeDamage, null, this);
@@ -47,8 +50,6 @@ function update() {
 }
 
 function playerHit(p, enemy) {
-    if (enemy.key === 'pumpkin') return;
-
     // find the enemy that's hitting the player
     enemy.hitting = true;
     for (var type in enemies) {
@@ -85,7 +86,6 @@ function bulletHitObject(bullet, collisionObject) {
 
 function bulletHitEnemy(bullet, enemy) {
     bullet.kill();
-    if (enemy.key === 'pumpkin') return;
 
     enemy.shot = true;
     for (var type in enemies) {
@@ -103,4 +103,8 @@ function bulletHitEnemy(bullet, enemy) {
 function itemPickup(p, item) {
     player.pickUpItem(item.key);
     item.kill();
+}
+
+function damagePumpkin(enemy, pumpkin) {
+    // PIVOT
 }

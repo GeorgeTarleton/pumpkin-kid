@@ -3,7 +3,7 @@ var shadow;
 
 var map;
 var groundLayer, bottomLayer, midLayer, topLayer, aboveLayer, collisionLayer;
-var entitiesLayer, playerLayer, bulletsLayer, itemsLayer;
+var entitiesLayer, playerLayer, bulletsLayer, itemsLayer, pumpkinsLayer;
 var uiLayer;
 
 var player;
@@ -29,7 +29,7 @@ var ammoBar;
 var loadout;
 
 var cursors;
-var keyPumpkin, keyAttack, keyWeapon;
+var keyPumpkin, keyAttack, keyWeapon, keyCandle;
 
 var music;
 
@@ -59,6 +59,7 @@ function create() {
     // create player & player-interactable objects between appropriate layers
     itemsLayer = game.add.group();
     entitiesLayer = game.add.group();
+    pumpkinsLayer = game.add.group();
     bulletsLayer = game.add.group();
     playerLayer = game.add.group();
 
@@ -106,6 +107,9 @@ function create() {
     keyWeapon = game.input.keyboard.addKey(Phaser.Keyboard.X);
     keyWeapon.onDown.add(switchWeapon, this);
 
+    keyCandle = game.input.keyboard.addKey(Phaser.Keyboard.C);
+    keyCandle.onDown.add(feedCandle, this);
+
     game.camera.follow(player.sprite);
 }
 
@@ -152,6 +156,19 @@ function switchWeapon() {
     player.weapon.loadout.visible = false;
     player.switchWeapon();
     player.weapon.loadout.visible = true;
+}
+
+function feedCandle() {
+    if (player.candles > 0) {
+        for (var i in pumpkins) {
+            var p = pumpkins[i];
+            if (distBetweenCenters(player.sprite, p.sprite) < 20) {
+                p.heal();
+                player.feedCandle();
+                break;
+            }
+        }
+    }
 }
 
 function placePumpkins() {

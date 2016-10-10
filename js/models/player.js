@@ -82,6 +82,8 @@ var Player = function(spriteX, spriteY) {
     this.ammo = 5 * this.clipSize;
 
     this.score = 0;
+
+    this.candles = 2;
 }
 
 Player.prototype.update = function(cursors) {
@@ -163,13 +165,19 @@ Player.prototype.updateVisionMask = function() {
 Player.prototype.shrinkVision = function() {
     this.visionShrinkTimer.add(20000, this.shrinkVision, this);
     if (this.visionShrinkTimer.running) {
-        this.visionRadius -= 10;
-        if (this.visionRadius < 20) this.visionRadius = 20;
+        this.visionRadius = Math.max(this.visionRadius - 10, 20);
+        this.candles = Math.max(--this.candles, 0);
 
         this.visionMask = this.visionMasks[this.visionRadius];
     } else {
         this.visionShrinkTimer.start();
     }
+}
+
+Player.prototype.feedCandle = function() {
+    this.candles--;
+    this.visionRadius = Math.max(this.visionRadius - 10, 20);
+    this.visionMask = this.visionMasks[this.visionRadius];
 }
 
 Player.prototype.switchWeapon = function() {
@@ -273,6 +281,7 @@ Player.prototype.pickUpItem = function(itemKey) {
         this.hp = Math.min(this.hp + 40, 200);
         this.updateHPBar();
     } else if (itemKey === 'candle') {
+        this.candles++;
         this.visionRadius = Math.min(this.visionRadius + 10, 70);
         this.visionMask = this.visionMasks[this.visionRadius];
         this.visionShrinkTimer.stop(true);

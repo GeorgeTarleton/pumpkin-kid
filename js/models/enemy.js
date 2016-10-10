@@ -41,6 +41,7 @@ Enemy.prototype.chasePlayer = function() {
     //     this.block === 'up' && this.sprite.body.blocked.up ||
     //     this.block === 'down' && this.sprite.body.blocked.down) return;
 
+
     var dX = this.sprite.centerX - player.sprite.centerX;
     var dY = this.sprite.centerY - player.sprite.centerY;
 
@@ -128,6 +129,15 @@ Enemy.prototype.attack = function() {
     t.start();
 }
 
+Enemy.prototype.spawnCandle = function() {
+    if (game.rnd.integerInRange(0, 1) == 0) return;  // 1/2 chance
+
+    var item = itemsLayer.create(this.sprite.centerX, this.sprite.centerY, 'candle');
+    game.physics.arcade.enable(item);
+    item.animations.add('hover', [0, 1, 2, 3], 4, true);
+    item.animations.play('hover');
+}
+
 
 
 
@@ -196,6 +206,8 @@ Ghost.prototype.die = function() {
     this.sprite.body.enable = false;
 
     player.score += 10;
+
+    this.spawnCandle();
 }
 
 
@@ -284,4 +296,7 @@ Skeleton.prototype.die = function() {
     this.sprite.body.enable = false;
 
     player.score += 10;
+
+    this.spawnCandle();
 }
+
