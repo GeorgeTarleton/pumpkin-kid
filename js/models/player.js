@@ -1,6 +1,6 @@
 // player states
 FREE = 0, ROOTED = 1, KNOCKED_BACK = 2;
-DEFAULT = 0, ATTACKING = 1, ATTACKED = 2;
+DEFAULT = 0, ATTACKING = 1, ATTACKED = 2, DEATH = 3;
 
 
 var Player = function(spriteX, spriteY) {
@@ -23,6 +23,8 @@ var Player = function(spriteX, spriteY) {
     this.sprite.animations.add('damage_left', [49], 1, true);
     this.sprite.animations.add('damage_up', [50], 1, true);
     this.sprite.animations.add('damage_right', [51], 1, true);
+    this.sprite.animations.add('death', [52, 53, 54, 55, 56], 8, false);
+
     this.sprite.animations.play('idle_down');
 
     game.physics.arcade.enable(this.sprite);
@@ -61,6 +63,7 @@ var Player = function(spriteX, spriteY) {
 
     this.visionRadius = 40;
 
+    this.alive = true;
     this.hp = 200;
     this.clipSize = 10;
     this.ammo = 5 * this.clipSize;
@@ -191,6 +194,10 @@ Player.prototype.takeDamage = function(sourceEnemy) {
     this.hp = Math.max(this.hp, 0);
     this.updateHPBar();
     if (this.hp == 0) {
+        this.sprite.animations.play('death');
+        this.animationState = DEATH;
+        this.weapon.sprite.visible = false;
+        this.alive = false;
         gameOver();
         return;
     }

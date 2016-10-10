@@ -167,6 +167,6 @@ function spawnSkeletons() {
 }
 
 function gameOver() {
-    player.sprite.kill();
+    
 }
 
