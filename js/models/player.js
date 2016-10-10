@@ -109,6 +109,7 @@ Player.prototype.update = function(cursors) {
             break;
     }
 
+    if (!this.alive) return;
     switch(this.movementState) {
         case FREE:
             if (direction === 'up') {

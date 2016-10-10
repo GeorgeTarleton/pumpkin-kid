@@ -115,11 +115,13 @@ function setupUI() {
 }
 
 function attack() {
+    if (!player.alive) return;
     player.attack();
 }
 
 
 function togglePumpkin() {
+    if (!player.alive) return;
     for (var i = 0; i < pumpkins.length; ++i) {
         if (distBetweenCenters(player.sprite, pumpkins[i].sprite) < 20) {
             pumpkins[i].toggle();
@@ -129,6 +131,7 @@ function togglePumpkin() {
 }
 
 function switchWeapon() {
+    if (!player.alive) return;
     player.weapon.loadout.visible = false;
     player.switchWeapon();
     player.weapon.loadout.visible = true;
@@ -167,6 +170,7 @@ function spawnSkeletons() {
 }
 
 function gameOver() {
-    
+    spawnTimers.ghosts.destroy();
+    spawnTimers.skeletons.destroy();
 }
 
