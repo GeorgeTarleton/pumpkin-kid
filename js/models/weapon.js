@@ -44,7 +44,7 @@ var Shovel = function(spriteX, spriteY) {
 
     this.attackAnimationTime = 500;
     this.attackTime = 600;
-    this.damage = 50;
+    this.damage = 70;
 
     this.loadoutRes = 'shovel_icon';
 }
@@ -91,7 +91,7 @@ var Gun = function(spriteX, spriteY) {
 
     this.attackAnimationTime = 200;
     this.attackTime = 200;
-    this.damage = 30;
+    this.damage = 40;
 
     this.loadoutRes = 'gun_icon';
 }

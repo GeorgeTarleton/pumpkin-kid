@@ -166,7 +166,7 @@ Player.prototype.shrinkVision = function() {
     this.visionShrinkTimer.add(20000, this.shrinkVision, this);
     if (this.visionShrinkTimer.running) {
         this.candles = Math.max(--this.candles, 0);
-        if (this.candles <= 5) {
+        if (this.candles < 5) {
             this.visionRadius = Math.max(this.visionRadius - 10, 20);
         }
 
@@ -179,7 +179,7 @@ Player.prototype.shrinkVision = function() {
 
 Player.prototype.feedCandle = function() {
     this.candles = Math.max(--this.candles, 0);
-    if (this.candles <= 5) {
+    if (this.candles < 5) {
         this.visionRadius = Math.max(this.visionRadius - 10, 20);
     }
     candleText.text = this.candles.toString();
