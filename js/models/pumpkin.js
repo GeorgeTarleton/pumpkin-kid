@@ -39,7 +39,7 @@ Pumpkin.prototype.spawnItem = function() {
             itemKey
         );
         game.physics.arcade.enable(item);
-        item.animations.add('hover', [0, 1, 2, 3], 8, true);
+        item.animations.add('hover', [0, 1, 2, 3], 4, true);
         item.animations.play('hover');
 
         var t = game.time.create(true);
