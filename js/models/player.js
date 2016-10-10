@@ -190,6 +190,7 @@ Player.prototype.takeDamage = function(sourceEnemy) {
     this.hp -= sourceEnemy.damage;
     this.updateHPBar();
     if (this.hp <= 0) {
+        this.hp = 0;
         gameOver();
         return;
     }
