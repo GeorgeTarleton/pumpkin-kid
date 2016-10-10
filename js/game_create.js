@@ -198,5 +198,6 @@ function gameOver() {
     pumpkins.forEach(function(p) {
         if (p.itemSpawnClock) p.itemSpawnClock.destroy();
     });
+    music.stop();
 }
 
