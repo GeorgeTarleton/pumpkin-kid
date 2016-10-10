@@ -130,7 +130,7 @@ Enemy.prototype.attack = function() {
 }
 
 Enemy.prototype.spawnCandle = function() {
-    if (game.rnd.integerInRange(0, 1) == 0) return;  // 1/2 chance
+    if (game.rnd.integerInRange(0, 3) == 0) return;
 
     var item = itemsLayer.create(this.sprite.centerX, this.sprite.centerY, 'candle');
     game.physics.arcade.enable(item);
