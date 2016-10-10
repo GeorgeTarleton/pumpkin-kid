@@ -188,9 +188,9 @@ Player.prototype.afterAttack = function() {
 
 Player.prototype.takeDamage = function(sourceEnemy) {
     this.hp -= sourceEnemy.damage;
+    this.hp = Math.max(this.hp, 0);
     this.updateHPBar();
-    if (this.hp <= 0) {
-        this.hp = 0;
+    if (this.hp == 0) {
         gameOver();
         return;
     }

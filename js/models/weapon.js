@@ -45,6 +45,8 @@ var Shovel = function(spriteX, spriteY) {
     this.attackAnimationTime = 500;
     this.attackTime = 600;
     this.damage = 50;
+
+    this.loadoutRes = 'shovel_icon';
 }
 
 Shovel.prototype = Object.create(Weapon.prototype);
@@ -90,6 +92,8 @@ var Gun = function(spriteX, spriteY) {
     this.attackAnimationTime = 200;
     this.attackTime = 200;
     this.damage = 30;
+
+    this.loadoutRes = 'gun_icon';
 }
 
 Gun.prototype = Object.create(Weapon.prototype);

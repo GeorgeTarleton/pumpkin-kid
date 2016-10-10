@@ -16,6 +16,7 @@ var spawnTimers = {}
 
 var hpOverlay;
 var ammoBar;
+var loadout;
 
 var cursors;
 var keyPumpkin, keyAttack, keyWeapon;
@@ -101,6 +102,16 @@ function setupUI() {
     ammoBar = uiLayer.create(game.width - 6, 7, 'ammo_icon');
     ammoBar.anchor.set(1, 0);
     ammoBar.frame = 5;
+
+    loadout = uiLayer.create(8, game.height - 8, 'loadout');
+    loadout.anchor.set(0, 1);
+    player.weapons.forEach(function(w) {
+        w.loadout = uiLayer.create(0, 0, w.loadoutRes);
+        w.loadout.anchor.set(0, 1);
+        w.loadout.visible = false;
+        loadout.addChild(w.loadout);
+    });
+    player.weapon.loadout.visible = true;
 }
 
 function attack() {
@@ -118,7 +129,9 @@ function togglePumpkin() {
 }
 
 function switchWeapon() {
+    player.weapon.loadout.visible = false;
     player.switchWeapon();
+    player.weapon.loadout.visible = true;
 }
 
 function placePumpkins() {

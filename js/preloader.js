@@ -26,6 +26,9 @@ SpookyGame.Preloader.prototype = {
         game.load.image('pumpkin_hp', 'assets/ui/hp_pumpkin.gif');
         game.load.image('player_hp_overlay', 'assets/ui/hp_player_overlay.gif');
         game.load.image('pumpkin_hp_overlay', 'assets/ui/hp_pumpkin_overlay.gif');
+        game.load.image('loadout', 'assets/ui/loadout.gif');
+        game.load.image('shovel_icon', 'assets/ui/shovel.gif');
+        game.load.image('gun_icon', 'assets/ui/gun.gif');
 
         // vision assets
         game.load.image('shadow', 'assets/shadow.gif');
