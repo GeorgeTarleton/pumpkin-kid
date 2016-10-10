@@ -25,7 +25,7 @@ SpookyGame.Title.prototype = {
 
 
         startGame = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-        startGame.onDown.add(this.start, this);
+        startGame.onDown.addOnce(this.start, this);
     },
 
     start: function() {

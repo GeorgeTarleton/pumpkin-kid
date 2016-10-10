@@ -22,7 +22,7 @@ var spawnPoints = [
 var spawnTimes = [
     10000, 8000, 6000, 4000
 ];
-var stage = 0;
+var stage;
 
 var hpOverlay;
 var ammoBar;
@@ -73,18 +73,15 @@ function create() {
     groundLayer.resizeWorld();
 
 
+    // set up player & enemies
     player = new Player(320, 312);
 
     spawnTimers.ghosts = game.time.create(false);
     spawnTimers.skeletons = game.time.create(false);
-
+    stage = 0;
     placePumpkins();
     spawnGhosts();
     spawnSkeletons();
-
-
-
-
 
 
     // draw shadow & reveal masks
@@ -234,5 +231,14 @@ function gameOver() {
         if (p.itemSpawnClock) p.itemSpawnClock.destroy();
     });
     music.stop();
+
+    // restart game
+    keyAttack.onDown.addOnce(function() {
+        game.world.removeAll(true);
+        enemies = { 'ghosts': [], 'skeletons': [] };
+        pumpkins = [];
+        stage = 0;
+        game.state.start("Game");
+    }, this);
 }
 

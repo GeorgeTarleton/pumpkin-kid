@@ -232,15 +232,24 @@ Player.prototype.afterAttack = function() {
 }
 
 Player.prototype.die = function() {
-    this.sprite.animations.play('death');
+    this.sprite.animations.play('death', null, false);
     this.animationState = DEATH;
     this.weapon.sprite.visible = false;
     this.alive = false;
     this.sprite.body.velocity.set(0, 0);
     this.visionShrinkTimer.destroy();
+    this.deathVision();
 
 
     gameOver();
+}
+
+Player.prototype.deathVision = function() {
+    if (this.candles === 0) return;
+    var t = game.time.create(true);
+    t.add(500, this.deathVision, this);
+    t.start();
+    this.shrinkVision();
 }
 
 Player.prototype.takeDamage = function(sourceEnemy) {
