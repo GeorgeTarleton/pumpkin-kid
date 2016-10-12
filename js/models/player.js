@@ -232,12 +232,15 @@ Player.prototype.afterAttack = function() {
 }
 
 Player.prototype.die = function() {
+    if (!this.alive) return;
+
     this.sprite.animations.play('death', null, false);
     this.animationState = DEATH;
     this.weapon.sprite.visible = false;
     this.alive = false;
     this.sprite.body.velocity.set(0, 0);
     this.visionShrinkTimer.destroy();
+    if (this.candles > 5) this.candles = 5;
     this.deathVision();
 
 
@@ -250,13 +253,14 @@ Player.prototype.deathVision = function() {
     t.add(500, this.deathVision, this);
     t.start();
     this.shrinkVision();
+    candleText.text = "0";
 }
 
 Player.prototype.takeDamage = function(sourceEnemy) {
     this.hp -= sourceEnemy.damage;
     this.hp = Math.max(this.hp, 0);
     this.updateHPBar();
-    if (this.hp == 0) {
+    if (this.hp === 0) {
         this.die();
         return;
     }
