@@ -53,6 +53,10 @@ Shovel.prototype = Object.create(Weapon.prototype);
 
 Shovel.prototype.use = function(callback) {
     this.useInternal(callback);
+
+    var t = game.time.create(true);
+    t.add(250, function() { sounds.shovel.play(); }, this);
+    t.start();
 }
 
 

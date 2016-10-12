@@ -62,7 +62,13 @@ SpookyGame.Preloader.prototype = {
 
         // sounds
         game.load.audio('bg', 'assets/sound/graveyard.wav');
-
+        game.load.audio('start', 'assets/sound/start.wav');
+        game.load.audio('gun', 'assets/sound/gun.wav');
+        game.load.audio('shovel', 'assets/sound/shovel.wav');
+        game.load.audio('game_over', 'assets/sound/game_over.wav');
+        game.load.audio('feed', 'assets/sound/feed.wav');
+        game.load.audio('damage', 'assets/sound/damage.wav');
+        game.load.audio('pickup', 'assets/sound/pickup.wav');
     },
     create: function() {
         game.state.start("Title");

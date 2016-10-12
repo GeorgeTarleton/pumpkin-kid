@@ -23,12 +23,15 @@ SpookyGame.Title.prototype = {
         this.startText.animations.add('flash', [0, 3], 16, true);
         this.startText.animations.play('hover');
 
+        this.startSound = game.add.audio('start');
+        this.startSound.volume = 0.3;
 
         startGame = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         startGame.onDown.addOnce(this.start, this);
     },
 
     start: function() {
+        this.startSound.play();
         this.startText.animations.play('flash');
         var t = game.time.create(true);
         t.add(800, function() {

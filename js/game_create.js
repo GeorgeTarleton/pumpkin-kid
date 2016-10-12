@@ -34,6 +34,7 @@ var cursors;
 var keyPumpkin, keyAttack, keyWeapon, keyCandle;
 
 var music;
+var sounds = {};
 
 function create() {
     console.log("Game created");
@@ -110,6 +111,18 @@ function create() {
     keyCandle.onDown.add(feedCandle, this);
 
     game.camera.follow(player.sprite);
+
+    // sound effects
+    sounds.gun = game.add.audio('gun');
+    sounds.gun.volume = 0.3;
+    sounds.shovel = game.add.audio('shovel');
+    sounds.gameOver = game.add.audio('game_over');
+    sounds.gameOver.volume = 0.5;
+    sounds.feedCandle = game.add.audio('feed');
+    sounds.feedCandle.volume = 0.8;
+    sounds.damage = game.add.audio('damage');
+    sounds.pickup = game.add.audio('pickup');
+    sounds.pickup.volume = 0.3;
 }
 
 function setupUI() {
@@ -180,6 +193,7 @@ function feedCandle() {
             if (distBetweenCenters(player.sprite, p.sprite) < 20 && p.hp < 500) {
                 p.heal();
                 player.feedCandle();
+                // sounds.feedCandle.play();
                 break;
             }
         }
@@ -242,6 +256,8 @@ function gameOver() {
         s.anchor.set(0.5, 0);
     }, this);
     t.start();
+
+    sounds.gameOver.play();
 }
 
 function restartGame() {

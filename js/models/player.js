@@ -261,6 +261,8 @@ Player.prototype.takeDamage = function(sourceEnemy) {
         return;
     }
 
+    sounds.damage.play();
+
     this.animationState = ATTACKED;
 
     var currentAnim = this.sprite.animations.currentAnim.name;
@@ -299,6 +301,7 @@ Player.prototype.takeDamage = function(sourceEnemy) {
 }
 
 Player.prototype.pickUpItem = function(itemKey) {
+    sounds.pickup.play();
     if (itemKey === 'candy') {
         this.hp = Math.min(this.hp + 40, 200);
         this.updateHPBar();
