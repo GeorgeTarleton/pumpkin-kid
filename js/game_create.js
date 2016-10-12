@@ -20,7 +20,7 @@ var spawnPoints = [
     {x: 48, y: 49}, {x: 51, y: 49}, {x: 54, y: 49}, {x: 48, y: 55}, {x: 51, y: 55}, {x: 54, y: 55}
 ];
 var spawnTimes = [
-    10000, 8000, 6000, 4000
+    10000, 7500, 5000, 3000, 1500
 ];
 var stage;
 
@@ -249,6 +249,10 @@ function restartGame() {
     enemies = { 'ghosts': [], 'skeletons': [] };
     pumpkins = [];
     stage = 0;
-    game.state.start("Game");
+    game.state.start("Title");
+}
+
+function pauseGame() {
+
 }
 
