@@ -90,7 +90,7 @@ var Gun = function(spriteX, spriteY) {
     this.sprite.animations.play('idle_down');
 
     this.attackAnimationTime = 200;
-    this.attackTime = 200;
+    this.attackTime = 150;
     this.damage = 40;
 
     this.loadoutRes = 'gun_icon';
@@ -120,5 +120,7 @@ Gun.prototype.use = function(callback) {
         bullet.position.set(playerx + 4, playery + 4);
         bullet.body.velocity.set(200, 0);
     }
+
+    sounds.gun.play();
 }
 
