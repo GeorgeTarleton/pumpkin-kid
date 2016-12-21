@@ -7,14 +7,13 @@ var Enemy = function(spriteX, spriteY, spritesheet) {
     this.isDying = false;
 
     this.nextDirection = 'stop';
-    this.block = '';
     this.prevDirection = 'stop';
-    this.frameMoved = 0;
+
 }
 
 Enemy.prototype.updateInternal = function() {
-    this.frameMoved = ++this.frameMoved % 10;
     this.chasePlayer();
+
     if (this.nextDirection === 'left') {
         this.sprite.body.velocity.set(-this.speed, 0);
     } else if (this.nextDirection === 'right') {
@@ -36,57 +35,43 @@ Enemy.prototype.chasePlayer = function() {
 
     this.prevDirection = this.nextDirection;
 
-    // if (this.block === 'left' && this.sprite.body.blocked.left ||
-    //     this.block === 'right' && this.sprite.body.blocked.right ||
-    //     this.block === 'up' && this.sprite.body.blocked.up ||
-    //     this.block === 'down' && this.sprite.body.blocked.down) return;
+    var thisEnemy = this;
+    easystar.findPath(
+        Math.floor(this.sprite.body.x / 8),
+        Math.floor(this.sprite.body.y / 8),
+        Math.floor(player.sprite.body.x / 8),
+        Math.floor(player.sprite.body.y / 8),
+        function(path) { thisEnemy.followPath(path); });
+    easystar.calculate();
 
+    // console.log('enemy ' + debuggrid[Math.floor(this.sprite.body.x / 8)][Math.floor(this.sprite.body.y / 8)]);
+    // console.log('player ' + debuggrid[Math.floor(player.sprite.body.x / 8)][Math.floor(player.sprite.body.y / 8)]);
 
-    var dX = this.sprite.centerX - player.sprite.centerX;
-    var dY = this.sprite.centerY - player.sprite.centerY;
+}
 
-    if (Math.abs(dX) > Math.abs(dY)) {
-        if (dX > 0) {
-            if (this.sprite.body.blocked.left) {
-                this.block = 'left';
-                this.nextDirection = dY > 0 ? 'up' : 'down';
-            } else {
-                this.block = '';
-                this.nextDirection = 'left';
-            }
-        } else {
-            if (this.sprite.body.blocked.right) {
-                this.block = 'right';
-                this.nextDirection = dY > 0 ? 'up' : 'down';
-            } else {
-                this.block = '';
-                this.nextDirection = 'right';
-            }
-        }
+Enemy.prototype.followPath = function(path) {
+    if (!path || path.length === 0) {
+        this.nextDirection = 'stop';
+        console.log('no path');
+        return;
+    }
+
+    var currX = Math.floor(this.sprite.body.x / 8);
+    var currY = Math.floor(this.sprite.body.y / 8);
+
+    if (path[1].x > currX) {
+        this.nextDirection = 'right';
+    } else if (path[1].x < currX) {
+        this.nextDirection = 'left';
+    } else if (path[1].y > currY) {
+        this.nextDirection = 'down';
+    } else if (path[1].y < currY) {
+        this.nextDirection = 'up';
     } else {
-        if (dY > 0) {
-            if (this.sprite.body.blocked.up) {
-                this.block = 'up';
-                this.nextDirection = dX > 0 ? 'left' : 'right';
-            } else {
-                this.block = '';
-                this.nextDirection = 'up';
-            }
-        } else {
-            if (this.sprite.body.blocked.down) {
-                this.block = 'down';
-                this.nextDirection = dX > 0 ? 'left' : 'right';
-            } else {
-                this.block = '';
-                this.nextDirection = 'down';
-            }
-        }
+        this.nextDirection = 'stop';
     }
 
-
-    if (this.nextDirection !== this.prevDirection && this.frameMoved < 9 && this.prevDirection !== 'stop') {
-        this.nextDirection = this.prevDirection;
-    }
+    console.log(this.nextDirection);
 }
 
 Enemy.prototype.takeDamageInternal = function(source) {

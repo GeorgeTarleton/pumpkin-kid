@@ -33,6 +33,8 @@ var candleText;
 var cursors;
 var keyPumpkin, keyAttack, keyWeapon, keyCandle;
 
+var easystar;
+
 var music;
 var sounds = {};
 
@@ -73,6 +75,8 @@ function create() {
     map.setCollisionBetween(1, 100, true, 'collision');
     groundLayer.resizeWorld();
 
+    // init pathfinding
+    setupPathfinding();
 
     // set up player & enemies
     player = new Player(320, 312);
@@ -123,6 +127,29 @@ function create() {
     sounds.damage = game.add.audio('damage');
     sounds.pickup = game.add.audio('pickup');
     sounds.pickup.volume = 0.3;
+}
+
+function setupPathfinding() {
+    easystar = new EasyStar.js();
+    data = collisionLayer.layer.data;
+
+    // navigation grid represents the walkability of every adjacent 2x2 tile blocks (16x16 pixels);
+    // adjacent "navigation tiles" overlap on the actual tilemap
+    grid = [];
+    for (var i = 0; i < data.length - 1; i++) {
+        grid[i] = [];
+        for (var j = 0; j < data[i].length - 1; j++) {
+            // a "navigation tile" is walkable if & only if all 4 tiles it covers are walkable
+            if (data[i][j].index === -1 &&
+                data[i+1][j].index === -1 &&
+                data[i][j+1].index === -1 &&
+                data[i+1][j+1].index === -1) {
+                grid[i][j] = 0;
+            } else grid[i][j] = 1;
+        }
+    }
+    easystar.setGrid(grid);
+    easystar.setAcceptableTiles([0]);
 }
 
 function setupUI() {
