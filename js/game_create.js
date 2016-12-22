@@ -234,11 +234,12 @@ function placePumpkins() {
         new Pumpkin(55*8, 39*8),
         new Pumpkin(47*8, 23*8),
         new Pumpkin(30*8, 33*8),
-        new Pumpkin(36*8, 49*8),
+        new Pumpkin(42*8, 47*8),
         new Pumpkin(48*8, 59*8),
         new Pumpkin(18*8, 57*8),
-        new Pumpkin(30*8, 11*8),
-        new Pumpkin(20*8, 43*8)
+        new Pumpkin(38*8, 11*8),
+        new Pumpkin(20*8, 43*8),
+        new Pumpkin(38*8, 65*8)
     );
 }
 
