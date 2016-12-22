@@ -35,24 +35,35 @@ Enemy.prototype.chasePlayer = function() {
 
     this.prevDirection = this.nextDirection;
 
+    // Since player hitbox is 1 tile (8px) high, it may be down against a wall, placing it
+    // entirely within a 2x2 nav tile that is marked as unwalkable (due to the wall).
+    // Check the tile above and see if we can path to that tile instead.
+
+    var enemeyX = Math.floor(this.sprite.body.x / 8);
+    var enemeyY = Math.floor(this.sprite.body.y / 8);
+    var playerX = Math.floor(player.sprite.body.x / 8);
+    var playerY = Math.floor(player.sprite.body.y / 8);
+
+    // nav grid is [y,x]
+    if (navigationGrid[playerY][playerX] !== 0) {
+        playerY--;
+    }
+
     var thisEnemy = this;
     easystar.findPath(
         Math.floor(this.sprite.body.x / 8),
         Math.floor(this.sprite.body.y / 8),
-        Math.floor(player.sprite.body.x / 8),
-        Math.floor(player.sprite.body.y / 8),
+        playerX,
+        playerY,
         function(path) { thisEnemy.followPath(path); });
     easystar.calculate();
 
-    // console.log('enemy ' + debuggrid[Math.floor(this.sprite.body.x / 8)][Math.floor(this.sprite.body.y / 8)]);
-    // console.log('player ' + debuggrid[Math.floor(player.sprite.body.x / 8)][Math.floor(player.sprite.body.y / 8)]);
 
 }
 
 Enemy.prototype.followPath = function(path) {
     if (!path || path.length === 0) {
         this.nextDirection = 'stop';
-        console.log('no path');
         return;
     }
 
@@ -70,8 +81,6 @@ Enemy.prototype.followPath = function(path) {
     } else {
         this.nextDirection = 'stop';
     }
-
-    console.log(this.nextDirection);
 }
 
 Enemy.prototype.takeDamageInternal = function(source) {

@@ -34,6 +34,7 @@ var cursors;
 var keyPumpkin, keyAttack, keyWeapon, keyCandle;
 
 var easystar;
+var navigationGrid = [];
 
 var music;
 var sounds = {};
@@ -135,20 +136,20 @@ function setupPathfinding() {
 
     // navigation grid represents the walkability of every adjacent 2x2 tile blocks (16x16 pixels);
     // adjacent "navigation tiles" overlap on the actual tilemap
-    grid = [];
+    navigationGrid = [];
     for (var i = 0; i < data.length - 1; i++) {
-        grid[i] = [];
+        navigationGrid[i] = [];
         for (var j = 0; j < data[i].length - 1; j++) {
             // a "navigation tile" is walkable if & only if all 4 tiles it covers are walkable
             if (data[i][j].index === -1 &&
                 data[i+1][j].index === -1 &&
                 data[i][j+1].index === -1 &&
                 data[i+1][j+1].index === -1) {
-                grid[i][j] = 0;
-            } else grid[i][j] = 1;
+                navigationGrid[i][j] = 0;
+            } else navigationGrid[i][j] = 1;
         }
     }
-    easystar.setGrid(grid);
+    easystar.setGrid(navigationGrid);
     easystar.setAcceptableTiles([0]);
 }
 
