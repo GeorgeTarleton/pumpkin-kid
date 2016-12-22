@@ -41,15 +41,15 @@ function update() {
         }
     }
 
-    if (player.score > 3000){
+    if (player.score > 2000){
         stage = 5;
-    } else if (player.score > 2000) {
+    } else if (player.score > 1500) {
         stage = 4;
-    } else if (player.score > 1000) {
+    } else if (player.score > 700) {
         stage = 3;
-    } else if (player.score > 500) {
+    } else if (player.score > 300) {
         stage = 2;
-    } else if (player.score > 200) {
+    } else if (player.score > 150) {
         stage = 1;
     }
 }

@@ -22,6 +22,9 @@ var spawnPoints = [
 var spawnTimes = [
     10000, 7500, 5000, 3000, 1500
 ];
+var candleSpawns = [
+    3, 2, 1, 1, 1
+];
 var stage;
 
 var hpOverlay;
@@ -188,7 +191,7 @@ function setupUI() {
     candleText.align = candleText.ALIGN_RIGHT;
     var candleCount = uiLayer.create(game.width - 34, game.height - 15, candleText);
     candleCount.anchor.set(1, 1);
-    candleText.text = "2";
+    candleText.text = player.candles.toString();
 }
 
 function attack() {

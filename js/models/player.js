@@ -71,7 +71,7 @@ var Player = function(spriteX, spriteY) {
         this.visionMasks[i].anchor.set(0.5, 0.5);
     }
 
-    this.visionRadius = 40;
+    this.visionRadius = 50;
     this.visionMask = this.visionMasks[this.visionRadius];
     this.visionShrinkTimer = game.time.create(false);
     this.shrinkVision();
@@ -83,7 +83,7 @@ var Player = function(spriteX, spriteY) {
 
     this.score = 0;
 
-    this.candles = 2;
+    this.candles = 3;
 }
 
 Player.prototype.update = function(cursors) {

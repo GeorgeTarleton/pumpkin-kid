@@ -120,7 +120,7 @@ Enemy.prototype.attack = function() {
 }
 
 Enemy.prototype.spawnCandle = function() {
-    if (game.rnd.integerInRange(0, 3) == 0) return;
+    if (game.rnd.integerInRange(0, candleSpawns[stage]) == 0) return;
 
     var item = itemsLayer.create(this.sprite.centerX, this.sprite.centerY, 'candle');
     game.physics.arcade.enable(item);
@@ -247,13 +247,6 @@ Skeleton.prototype.update = function() {
     if (this.isKnockedBack) return;
 
     this.sprite.animations.play('walk_' + this.nextDirection);
-
-    // console.log(this.sprite.centerX - player.sprite.body.center.x)
-    // console.log(this.sprite.centerY - player.sprite.body.center.y)
-    // if (Math.abs(this.sprite.centerX - player.sprite.body.center.x) < 18 &&
-    //     Math.abs(this.sprite.centerY - player.sprite.body.center.y) < 14) {
-    //     this.sprite.body.velocity.set(0, 0);
-    // }
 }
 
 Skeleton.prototype.takeDamage = function(source) {
