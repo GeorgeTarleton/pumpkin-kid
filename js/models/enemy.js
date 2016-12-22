@@ -9,6 +9,9 @@ var Enemy = function(spriteX, spriteY, spritesheet) {
     this.nextDirection = 'stop';
     this.prevDirection = 'stop';
 
+    // Only re-pathfind after this many frames; alleviates performance and visual issues
+    this.frameCount = 0;
+    this.frameLimit = 20;
 }
 
 Enemy.prototype.updateInternal = function() {
@@ -32,6 +35,14 @@ Enemy.prototype.chasePlayer = function() {
         this.nextDirection = 'stop';
         return;
     }
+
+    this.frameCount++;
+    if (this.frameCount < this.frameLimit) {
+        return;
+    } else {
+        this.frameCount = 0;
+    }
+    console.log('path')
 
     this.prevDirection = this.nextDirection;
 
