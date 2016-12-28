@@ -42,7 +42,6 @@ Enemy.prototype.chasePlayer = function() {
     } else {
         this.frameCount = 0;
     }
-    console.log('path')
 
     this.prevDirection = this.nextDirection;
 
@@ -87,6 +86,10 @@ Enemy.prototype.followPath = function(path) {
         this.nextDirection = 'up';
     } else {
         this.nextDirection = 'stop';
+    }
+
+    if (this.nextDirection == 'right' || this.nextDirection == 'left') {
+
     }
 }
 
