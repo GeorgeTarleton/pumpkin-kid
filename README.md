@@ -5,7 +5,7 @@ A game by @jzfeng and @jubnaut, with music by @carlospazuzu.
 
 Play it here: https://jub.itch.io/pumpkin-kid
 
-#Instructions
+# Instructions
 
 - SPACE to attack
 - Z to activate pumpkins
